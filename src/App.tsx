@@ -4,7 +4,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthContextProvider } from "./hooks/auth/AuthContext";
 import { queryClient } from "./queryClient";
-import Home from "./pages/Home";
+import Home from "./pages/components/Home";
 import Post from "./pages/Post";
 import CreatePost from "./pages/CreatePost";
 import CreateVoca from "./pages/CreateVoca";
