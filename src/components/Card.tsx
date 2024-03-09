@@ -72,27 +72,3 @@ export const CardBotton: React.FC<CardBottonProps> = ({ page, totalPage }) => {
 }
 
 
-
-
-
-
-interface CardProps {
-    headerRatio: number;
-    footerRatio: number;
-    children: React.ReactNode;
-}
-export function BasicCard({ headerRatio, footerRatio, children }: CardProps): JSX.Element {
-    return (
-        <div className="relative w-full h-full rounded-3xl overflow-hidden"> 
-            <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
-                <CardHeader backgroundColor='blue'>Header</CardHeader>
-            </div>
-            <div style={{ height: `${(100 - headerRatio - footerRatio)}%` }}>
-                <CardBody  backgroundColor='red'>{children}</CardBody>
-            </div>
-            <div style={{ height: `${footerRatio}%` }}>
-                <CardFooter  backgroundColor='blue'><CardBotton page={2} totalPage={10} /></CardFooter>
-            </div>
-        </div>
-    );
-}
