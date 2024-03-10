@@ -12,6 +12,9 @@ import Vocabulary from "./pages/Vocabulary";
 
 
 export default function App() {
+
+
+
   return (
       <QueryClientProvider client={queryClient}>
         <AuthContextProvider>
