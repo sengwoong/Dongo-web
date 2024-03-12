@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from "axios";
-
 import { baseUrl } from "./constants";
 
 

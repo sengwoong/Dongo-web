@@ -2,7 +2,7 @@ import { queryKeys } from "./constants";
 
 export const generateUserKey = (userId: number, userToken: string) => {
   // deliberately exclude the userToken from the dependency array
-  //   to keep key consistent for userId regardless of token changes
+  // to keep key consistent for userId regardless of token changes
   return [queryKeys.user, userId];
 };
 

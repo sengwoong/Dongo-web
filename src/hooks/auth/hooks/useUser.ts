@@ -1,10 +1,11 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-import { generateUserKey } from "@/../../utils/react_query/key-factories";
-import { queryKeys } from "@/../../utils/react_query/constants";
-import { User } from "../../../utils/types";
-import { axiosInstance, getJWTHeader } from "../../../utils/axiosInstance";
-import { useLoginData } from "../auth/AuthContext";
+import { generateUserKey } from "../../../../utils/react_query/key-factories.ts";
+import { User } from "../../../../utils/types.ts";
+import { useLoginData } from "../AuthContext";
+import { queryKeys } from "../../../../utils/react_query/constants.ts";
+import { axiosInstance, getJWTHeader } from "../../../../utils/axiosInstance/index.ts";
+
 
 // query function
 async function getUser(userId: number, userToken: string) {
@@ -17,6 +18,7 @@ async function getUser(userId: number, userToken: string) {
 
   return data.user;
 }
+
 
 export function useUser() {
   const queryClient = useQueryClient();

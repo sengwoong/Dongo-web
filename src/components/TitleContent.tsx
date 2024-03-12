@@ -7,7 +7,7 @@ interface TitleProps {
   onClick: () => void;
 }
 
-const MenuTitle: React.FC<TitleProps> = ({ text, isSelected, onClick }) => {
+export const MenuTitle: React.FC<TitleProps> = ({ text, isSelected, onClick }) => {
   return (
     <span
       style={{
@@ -15,6 +15,7 @@ const MenuTitle: React.FC<TitleProps> = ({ text, isSelected, onClick }) => {
         fontWeight: isSelected ? 'bold' : 'normal',
         textDecoration: isSelected ? 'underline':'none',  
       }}
+      
       onClick={onClick}
     >
       {text}
@@ -23,4 +24,26 @@ const MenuTitle: React.FC<TitleProps> = ({ text, isSelected, onClick }) => {
   );
 }
 
-export default MenuTitle;
+
+
+interface MiniTitleProps {
+    text: string;
+    onClick: () => void;
+  }
+
+  
+
+
+
+export const MiniMenuTitle: React.FC<MiniTitleProps> = ({ text,  onClick }) => {
+    return (
+      <span
+        className=' text-sm cursor-pointer'
+        onClick={onClick}
+      >
+        {text}
+        &nbsp;
+      </span>
+    );
+  }
+  

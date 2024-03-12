@@ -2,9 +2,9 @@
 
 import axios,{ AxiosResponse } from "axios";
 
-import { useUser } from "../hooks/useUser";
+import { useUser } from "./hooks/useUser";
 import { useLoginData } from "./AuthContext";
-import { User } from "@/../../utils/types";
+import { User } from "../../../utils/types";
 import { axiosInstance } from "../../../utils/axiosInstance";
 
 
