@@ -135,19 +135,15 @@ import React, {
             console.log(moveToBack)
             copy.push(cardToTransfer);
           } else {
-            console.log("trush")
-            console.log("trush")
-            console.log("trush")
+           
             const insertAtIndex = copy.findIndex((el) => el.id === before);
             if (insertAtIndex === undefined) return;
     
             copy.splice(insertAtIndex, 0, cardToTransfer);
           }
-          // todo1 아래 요청대로 백엔드 수정 및 페이지네이션 만들기
-          // 원본을 삭제하기
-          // 해당원본을 id 와 컬럼을 가지고 산입하기
-          // 그러므로 뮤테이트로 post 요청으로 원본아이디와 바꿔야할 원본을 바디로 보내서 기존원본아이디로 삭제이후 
-          // 바디에 보낸원본을 다시재등록하기 
+          // todo1 
+         // 이부분 그냥 다지우고 리엑트 쿼리로 다시 받아오는 mutate 로만들기
+         
           setCards(copy);
         }
       };

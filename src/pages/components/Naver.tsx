@@ -4,15 +4,20 @@ import { SelectableTitleList } from '../../components/CrateSelectableTitleList'
 import { MiniMenuTitle } from '../../components/TitleContent'
 import { useAuthActions } from '../../hooks/auth/useAuthActions';
 
+// todo 파라미터로 강조표시 타이틀 버그있음
 function Naver() {
     const titles: string[] = ['다운로드', '시험장', '단어장', '내노트'];
+
+    const authActions = useAuthActions();
+    const { signout } = authActions;
+    
 
     const navigate = useNavigate();
   
   
     function logoutBtn(){
       console.log("로그아웃")
-      useAuthActions().signout()
+      signout()
     }
   
     function loginBtn(){

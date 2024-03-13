@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
+import React, {  useState } from 'react';
 import { useAuthActions } from '../hooks/auth/useAuthActions';
+
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const authActions = useAuthActions();
   const { signin } = authActions;
-  
-  const handleLogin = async () => {
-    signin(email, password)
+
+  const handleLogin = async ()=> {
+    await signin(email, password);
   };
 
+ 
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="w-full max-w-xs">
         <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-              사용자 이름
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="useremail">
+              사용자 이메일 
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -46,7 +48,8 @@ function Login() {
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="button"
-              onClick={handleLogin}
+              onClick={()=>{handleLogin()}}
+              // 버튼 클릭 시에만 로그인 함수 실행
             >
               로그인
             </button>
@@ -58,5 +61,3 @@ function Login() {
 }
 
 export default Login;
-
-

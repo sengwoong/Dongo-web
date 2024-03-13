@@ -3,6 +3,8 @@ export const paramKrToEng: Record<string, string> = {
     시험장: "exam_room",
     단어장: "vocabulary",
     내노트: "my_notes",
+    다운로드:"down_load",
+    포스트:"post"
   };
 
 
@@ -11,5 +13,7 @@ export const paramKrToEng: Record<string, string> = {
   ExamRoom: "exam_room",
   Vocabulary: "vocabulary",
   MyNotes: "my_notes",
+  DownLoad:"down_load",
+  Post:"post",
 };
 

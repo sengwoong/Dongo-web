@@ -1,7 +1,7 @@
-const USER_LOCALSTORAGE_KEY = "lazyday_user";
+const USER_LOCALSTORAGE_KEY = "user";
 import { LoginData } from "./types";
 
-// helper to get user from localstorage
+
 export function getStoredLoginData(): LoginData | null {
   const storedLoginData = localStorage.getItem(USER_LOCALSTORAGE_KEY) ?? '';
   try {
@@ -16,5 +16,7 @@ export function setStoredLoginData(loginData: LoginData): void {
 }
 
 export function clearStoredLoginData(): void {
+  console.log("clearStoredLoginData 까지 실행 ")
   localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+  console.log("clearStoredLoginData 에서 에러")
 }

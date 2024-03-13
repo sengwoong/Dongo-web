@@ -27,7 +27,6 @@ export function useAuthActions(): UseAuth {
   const { setLoginData, clearLoginData } = useLoginData();// 로컬스토리지
 
   const SERVER_ERROR = "There was an error contacting the server.";
-  // const toast = useCustomToast();
 
   async function authServerCall(
     urlEndpoint: string,
@@ -44,24 +43,11 @@ export function useAuthActions(): UseAuth {
 
       if (status === 400) {
         const title = "message" in data ? data.message : "Unauthorized";
-        // toast({ title, status: "warning" });
-        return;
-      }
-      console.log("data")
-      console.log("data")
-      console.log(data)
-
-
-    
   
+        return;
+      }  
       if ( data ) {
         const { userId, token } = data as UserResponse;
-        console.log("userId")
-        console.log("userId")
-        console.log(userId)
-        console.log("userToken")
-        console.log("userToken")
-        console.log(token)
         updateUser(data as UserResponse); // 리엑트쿼리에 토큰을 들고가기 
         setLoginData({ userId: userId , userToken: token ??'' }); // 로컬스토리지 토큰산입
       }
@@ -76,6 +62,7 @@ export function useAuthActions(): UseAuth {
 
 
   async function signin(email: string, password: string): Promise<void> {
+    console.log("로그인")
     authServerCall("/user/login", email, password);
   }
   async function signup(email: string, password: string): Promise<void> {
@@ -83,11 +70,12 @@ export function useAuthActions(): UseAuth {
   }
 
   function signout(): void {
+    console.log("signout")
     clearUser();
+    console.log("signout")
     clearLoginData();
   }
 
-  // Return the user object and auth methods
   return {
     signin,
     signup,

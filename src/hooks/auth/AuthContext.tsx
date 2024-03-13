@@ -19,10 +19,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 // eslint-disable-next-line react-refresh/only-export-components
 export const useLoginData = () => {
   const authValue = useContext(AuthContext);
-  console.log("authValue")
-  console.log("authValue")
-  console.log("useContext 에서 설정하는놈AuthContext userId, userToken, clearLoginData, setLoginData 로 예상됨")
-  console.log(authValue)
+ 
   if (!authValue) {
     throw new Error(
       "Error! AuthContext called from outside the AuthContextProvider"

@@ -40,10 +40,16 @@ export function BasicCard({ headerRatio, footerRatio }: CardProps): JSX.Element 
 
 
 
-
-
-
 export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
+
+  const navigate = useNavigate();
+
+  const GotoPost = () => {
+    console.log("GotoPost");
+    navigate(`/${paramKeys.Post}`);
+    console.log(paramKeys.Post);
+  };
+
   return (
     <div className="relative w-full h-full rounded-3xl overflow-hidden">
       <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/boling.png" />
@@ -67,9 +73,9 @@ export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
           <CardFooter>
             <div className="flex justify-between items-center w-11/12">
               <p>설명 페이지로 이동하기</p>
-            <RoundBlueButton>
-            <p className="text-sm">Click</p>
-            </RoundBlueButton>               
+              <RoundBlueButton onClick={GotoPost}> {/* 괄호를 제거하여 함수를 전달합니다 */}
+                <p className="text-sm">Click</p>
+              </RoundBlueButton>               
             </div>
           </CardFooter>
         </div>
@@ -78,11 +84,12 @@ export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   );
 }
 
+
 export function SaveVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   const navigate = useNavigate();
 
   const GotoNote = () => {
-    navigate(`/${paramKeys.MyNotes}`); 
+    navigate(`/${paramKeys.DownLoad}`); 
     }
   
     return (
@@ -124,20 +131,20 @@ export function SelectVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.
 
       
 const GotoWord = () => {
-  navigate(`/${paramKeys.GotoWord}`); 
+  navigate(`/${paramKeys.Vocabulary}`); 
   }
     return (
       <div className="relative w-full h-full rounded-3xl overflow-hidden">
         <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/search.png" />
         <div className='absolute w-full h-full text-center'>
           <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
-            <CardHeader><p className="text-xl mt-4 text">단어장 검색</p></CardHeader>
+            <CardHeader><p className="text-xl mt-4 text"> 단어장으로 으로 이동</p></CardHeader>
           </div>
           <div style={{ height: `${100 - headerRatio - footerRatio}%` }}>
             <CardBody>
               <div className="flex flex-col items-center">
                 <p className="text-center text-md">
-                    단어장 검색 으로 이동
+                    단어장으로 으로 이동
                 </p>
               
               </div>
