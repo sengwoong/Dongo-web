@@ -1,5 +1,6 @@
 export interface Id {
   id: number;
+  
 }
 
 export interface NewUser {

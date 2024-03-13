@@ -1,2 +1,2 @@
-export const baseUrl:string = 'http://localhost:3030';
+export const baseUrl:string = 'https://dongo.loca.lt/';
 export const baseImageUrl:string = `${baseUrl}/images`;

@@ -6,8 +6,12 @@ import { useLoginData } from "../AuthContext";
 import { queryKeys } from "../../../../utils/react_query/constants.ts";
 import { axiosInstance, getJWTHeader } from "../../../../utils/axiosInstance/index.ts";
 
-
+type UserResponse = { 
+  userId: number,
+  token:string
+};
 // query function
+// 토근으로 유저의 아디를 들고오기 (뱍엔드에서 요청보내는듯)
 async function getUser(userId: number, userToken: string) {
   const { data }: AxiosResponse<{ user: User }> = await axiosInstance.get(
     `/user/${userId}`,
@@ -38,9 +42,9 @@ export function useUser() {
 // console.log("user 페이지 에서 사용되는 유조종보라고 생각함")
 // console.log(user)
   // meant to be called from useAuth
-  function updateUser(newUser: User): void {
+  function updateUser(newUser: UserResponse): void {
     queryClient.setQueryData(
-      generateUserKey(newUser.id, newUser.token??''),
+      generateUserKey(newUser.userId, newUser.token??''),
       newUser
     );
   }
@@ -49,11 +53,6 @@ export function useUser() {
   function clearUser() {
     // remove user profile data
     queryClient.removeQueries({ queryKey: [queryKeys.user] });
-
-    // remove user appointments data
-    queryClient.removeQueries({
-      queryKey: [queryKeys.appointments, queryKeys.user],
-    });
   }
 
   return { user, updateUser, clearUser };

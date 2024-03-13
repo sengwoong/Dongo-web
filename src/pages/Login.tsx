@@ -1,27 +1,14 @@
 import React, { useState } from 'react';
+import { useAuthActions } from '../hooks/auth/useAuthActions';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const authActions = useAuthActions();
+  const { signin } = authActions;
+  
   const handleLogin = async () => {
-    try {
-      const response = await fetch('로그인 API 엔드포인트 URL', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      if (response.ok) {
-        const data = await response.json();
-        // 로그인 성공 처리
-      } else {
-        // 로그인 실패 처리
-      }
-    } catch (error) {
-      console.error('로그인 오류:', error);
-    }
+    signin(email, password)
   };
 
   return (
@@ -34,11 +21,11 @@ function Login() {
             </label>
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="email"
               type="text"
               placeholder="사용자 이름"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -71,3 +58,5 @@ function Login() {
 }
 
 export default Login;
+
+

@@ -17,6 +17,42 @@ import React, {
     );
   };
   
+  // todo 리엑트 쿼리 들고오기 
+
+
+
+
+  // 백로그는 없고
+  // 컬럼은 단어장 이름
+  // Id 는추가하기
+  // 타이틀은 내용인데 타일틀을 이름과 내용으로 나눠야함
+  const DEFAULT_CARDS: CardType[] = [
+
+    // TODO
+    {
+      title: "Research DB options for new microservice",
+      id: "5",
+      column: "todo",
+    },
+    { title: "Postmortem for outage", id: "6", column: "todo" },
+    { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
+  
+    // DOING
+    {
+      title: "Refactor context providers to use Zustand",
+      id: "8",
+      column: "doing",
+    },
+    { title: "Add logging to daily CRON", id: "9", column: "doing" },
+    // DONE
+    {
+      title: "Set up DD dashboards for Lambda listener",
+      id: "10",
+      column: "done",
+    },
+  ];
+
+
   const Board = () => {
     const [cards, setCards] = useState(DEFAULT_CARDS);
   // 컬럼은 최대 3개까지해서 드래그드롭으로 단어장끌고와서 옮기기 가능하게하기 이떄 가로스크롤하기
@@ -107,7 +143,7 @@ import React, {
     
             copy.splice(insertAtIndex, 0, cardToTransfer);
           }
-    
+          // todo1 아래 요청대로 백엔드 수정 및 페이지네이션 만들기
           // 원본을 삭제하기
           // 해당원본을 id 와 컬럼을 가지고 산입하기
           // 그러므로 뮤테이트로 post 요청으로 원본아이디와 바꿔야할 원본을 바디로 보내서 기존원본아이디로 삭제이후 
@@ -156,7 +192,7 @@ import React, {
 
 
       
-
+// 근처에있니?
     const getNearestIndicator = (e: DragEvent, indicators: HTMLElement[]) => {
       const DISTANCE_OFFSET = 50;
   
@@ -277,7 +313,7 @@ import React, {
     };
   
     const handleDragEnd = (e: DragEvent) => {
-        // 쓰레기
+  // todo 단어 지우기
         console.log("쓰레기 통으로")
       const cardId = e.dataTransfer.getData("cardId");
       setCards((pv) => pv.filter((c) => c.id !== cardId));
@@ -374,32 +410,3 @@ import React, {
     column: ColumnType;
   };
   
-  // 백로그는 없고
-  // 컬럼은 단어장 이름
-  // Id 는추가하기
-  // 타이틀은 내용인데 타일틀을 이름과 내용으로 나눠야함
-  const DEFAULT_CARDS: CardType[] = [
-
-    // TODO
-    {
-      title: "Research DB options for new microservice",
-      id: "5",
-      column: "todo",
-    },
-    { title: "Postmortem for outage", id: "6", column: "todo" },
-    { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
-  
-    // DOING
-    {
-      title: "Refactor context providers to use Zustand",
-      id: "8",
-      column: "doing",
-    },
-    { title: "Add logging to daily CRON", id: "9", column: "doing" },
-    // DONE
-    {
-      title: "Set up DD dashboards for Lambda listener",
-      id: "10",
-      column: "done",
-    },
-  ];

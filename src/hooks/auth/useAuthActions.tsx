@@ -2,10 +2,11 @@
 
 import axios,{ AxiosResponse } from "axios";
 
-import { useUser } from "./hooks/useUser";
+
 import { useLoginData } from "./AuthContext";
 import { User } from "../../../utils/types";
 import { axiosInstance } from "../../../utils/axiosInstance";
+import { useUser } from "./hooks/useUser";
 
 
 interface UseAuth {
@@ -14,13 +15,16 @@ interface UseAuth {
   signout: () => void;
 }
 
-type UserResponse = { user: User };
+type UserResponse = { 
+  userId: number,
+  token:string
+};
 type ErrorResponse = { message: string };
 type AuthResponseType = UserResponse | ErrorResponse;
 
 export function useAuthActions(): UseAuth {
-  const { updateUser, clearUser } = useUser();
-  const { setLoginData, clearLoginData } = useLoginData();
+  const { updateUser, clearUser } = useUser();// 쿼리메소드 
+  const { setLoginData, clearLoginData } = useLoginData();// 로컬스토리지
 
   const SERVER_ERROR = "There was an error contacting the server.";
   // const toast = useCustomToast();
@@ -28,32 +32,38 @@ export function useAuthActions(): UseAuth {
   async function authServerCall(
     urlEndpoint: string,
     email: string,
-    password: string
+    pwd: string,
   ): Promise<void> {
     try {
-      const { data, status }: AxiosResponse<AuthResponseType> =
-        await axiosInstance({
-          url: urlEndpoint,
-          method: "POST",
-          data: { email, password },
-          headers: { "Content-Type": "application/json" },
-        });
+
+      const { data, status }: AxiosResponse<AuthResponseType> = await axiosInstance.post(urlEndpoint, { email, pwd }, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+      });
 
       if (status === 400) {
         const title = "message" in data ? data.message : "Unauthorized";
         // toast({ title, status: "warning" });
         return;
       }
+      console.log("data")
+      console.log("data")
+      console.log(data)
 
-      if ("user" in data && "token" in data.user) {
-        // toast({
-        //   title: `Logged in as ${data.user.email}`,
-        //   status: "info",
-        // });
 
-        // update stored user data
-        updateUser(data.user);
-        setLoginData({ userId: data.user.id, userToken: data.user.token ??'' });
+    
+  
+      if ( data ) {
+        const { userId, token } = data as UserResponse;
+        console.log("userId")
+        console.log("userId")
+        console.log(userId)
+        console.log("userToken")
+        console.log("userToken")
+        console.log(token)
+        updateUser(data as UserResponse); // 리엑트쿼리에 토큰을 들고가기 
+        setLoginData({ userId: userId , userToken: token ??'' }); // 로컬스토리지 토큰산입
       }
     } catch (errorResponse) {
       const title =
@@ -61,28 +71,20 @@ export function useAuthActions(): UseAuth {
         errorResponse?.response?.data?.message
           ? errorResponse?.response?.data?.message
           : SERVER_ERROR;
-      // toast({
-      //   title,
-      //   status: "error",
-      // });
     }
   }
 
+
   async function signin(email: string, password: string): Promise<void> {
-    authServerCall("/signin", email, password);
+    authServerCall("/user/login", email, password);
   }
   async function signup(email: string, password: string): Promise<void> {
-    authServerCall("/user", email, password);
+    authServerCall("/register", email, password);
   }
 
   function signout(): void {
-    // clear user from stored user data
     clearUser();
     clearLoginData();
-    // toast({
-    //   title: "Logged out!",
-    //   status: "info",
-    // });
   }
 
   // Return the user object and auth methods
