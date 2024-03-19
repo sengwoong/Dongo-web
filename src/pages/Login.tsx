@@ -1,7 +1,6 @@
 import React, {  useState } from 'react';
 import { useAuthActions } from '../hooks/auth/useAuthActions';
 
-
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -53,6 +52,7 @@ function Login() {
             >
               로그인
             </button>
+    
           </div>
         </form>
       </div>

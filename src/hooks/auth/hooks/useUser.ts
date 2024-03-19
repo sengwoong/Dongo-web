@@ -15,7 +15,7 @@ type UserResponse = {
 // 리플레쉬 토큰 을 던져줘서 새로로그인시킬수 있다.
 async function getUser(userId: number, userToken: string) {
   const { data }: AxiosResponse<{ user: User }> = await axiosInstance.get(
-    `/user/${userId}`,
+    `/user/token/${userId}`,
     {
       headers: getJWTHeader(userToken),
     }
