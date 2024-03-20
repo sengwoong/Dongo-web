@@ -38,8 +38,7 @@ async function getWords(productId:number) {
       refetchOnWindowFocus: true,
       refetchInterval: 60000, // every minute
     });
-    console.log("word")
-    console.log(word)
+
   
     return { word, isLoading, isError };
   }

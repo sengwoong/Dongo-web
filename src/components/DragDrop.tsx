@@ -11,11 +11,8 @@ import React, {
   import { motion } from "framer-motion";
   import { FaFire } from "react-icons/fa";
 import { useUpdateWordData, useWords } from "../hooks/api/my_word/my_word";
-import { ClipLoader } from "react-spinners";
 import LoadingBar from "./Portal/LoadingBar";
 import { useProducts } from "../hooks/api/my_product/my_product";
-import { Product } from "../../utils/types";
-import InfiniteScroll from "react-infinite-scroller";
 
   export const CustomKanban = () => {
     return (
@@ -24,55 +21,6 @@ import InfiniteScroll from "react-infinite-scroller";
       </div>
     );
   };
-
-
-
-
-
-
-
-  export default function ProductList() {
-    const { data: products, fetchNextPage, hasNextPage, isFetching: isLoading } = useProducts();
-  
-    const loadMore = () => {
-      if (hasNextPage && !isLoading) {
-        fetchNextPage();
-      }
-    };
-  
-    if (isLoading && !products) {
-      return <div>Loading...</div>;
-    }
-  
-    if (!products || products.pages.length === 0) {
-      return <div>No products available</div>;
-    }
-  
-    return (
-      <div
-        
-      >
-        <div className="max-w-full mt-96 z-50 flex">
-          {products.pages.map((pageData, pageIndex) => ( // 페이지 데이터와 페이지 인덱스를 매핑
-            <div key={pageIndex} > {/* 페이지 인덱스를 키로 사용 */}
-              {pageData.content.map((product: any, productIndex: number) => ( // 결과 데이터와 결과 인덱스를 매핑
-                <div key={productIndex} className="my-4 mx-4">
-                  <h3>{product.title}</h3>
-                  <p>{product.content}</p>
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  
-
-
-
-
 
 
 
@@ -98,15 +46,13 @@ import InfiniteScroll from "react-infinite-scroller";
   }
 
 
-
-    
   // 컬럼은 최대 3개까지해서 드래그드롭으로 단어장끌고와서 옮기기 가능하게하기 이떄 가로스크롤하기
   // 입력에 단어및 내용넣게하기
   // 끝나면 뮤테이트로 해당값을넣거 디비에서 handleDragEnd 에서 값을바꾸기
     return (
-      <div className="flex flex-col h-full  select-none gap-3  p-12">
-        <div className="flex h-32 justify-center items-center"> <ProductList></ProductList></div>
-        <div className="flex">
+      <div className="flex flex-col h-full  select-none gap-3  p-12 max-w-screen justify-center items-center">
+        <div className="flex h-32 justify-center items-center max-w-prose "> <ProductList></ProductList></div>
+        <div className="flex w-screen  justify-around ">
         <Column
           title="TODO"
           column={3}
@@ -121,13 +67,7 @@ import InfiniteScroll from "react-infinite-scroller";
           cards={cards}
           setCards={setCards}
         />
-        <Column
-          title="Complete"
-          column={5}
-          headingColor="text-emerald-200"
-          cards={cards}
-          setCards={setCards}
-        />
+      
         <BurnBarrel setCards={function (value: React.SetStateAction<CardType[]>): void {
           throw new Error("Function not implemented.");
         } }   />
@@ -138,6 +78,86 @@ import InfiniteScroll from "react-infinite-scroller";
 
 
   
+
+  
+  export default function ProductList() {
+    const { data: products, fetchNextPage, hasNextPage, isFetching: isLoading } = useProducts();
+    const [isEndOfScroll, setIsEndOfScroll] = useState(true);
+    const productListRef = useRef<HTMLDivElement>(null);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    console.log("products")
+    console.log("products")
+    console.log(products)
+    console.log(products)
+    const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+
+  
+        const productListElement = productListRef.current;
+        if (productListElement) {
+          const { scrollLeft, scrollWidth, clientWidth } = productListElement;
+  
+          console.log(scrollLeft > scrollWidth-clientWidth-((scrollWidth-clientWidth)/10))
+          // 현재 스크롤된 가로 위치를 계산하여 전체 가로 스크롤 너비의 90%에 도달했을 때 처리
+          if (scrollLeft > scrollWidth-clientWidth-((scrollWidth-clientWidth)/10)) {
+  
+    
+              loadMore();
+           
+          } 
+        }
+      }
+  
+    const loadMore = () => {
+      if (hasNextPage && !isLoading) {
+        fetchNextPage();
+      }
+    };
+  
+    if (isLoading && !products) {
+      return <div>Loading...</div>;
+    }
+  
+    if (!products || products.pages.length === 0) {
+      return <div>No products available</div>;
+    }
+  
+    return (
+      <div className="z-50 flex  max-w-prose  overflow-scroll" ref={productListRef}
+       onWheel={handleWheel}
+       >
+  
+        {products.pages.map((pageData, pageIndex) => (
+          <div key={pageIndex} className="flex  flex-no-wrap">
+            {pageData.content.map((product: any, productIndex: number) => (
+              <div key={productIndex} className="my-4 w-24 mx-4">
+                <h3>{product.title}</h3>
+                <p>{product.content}</p>
+              </div>
+            ))}
+          </div>
+        ))}
+  
+        {isEndOfScroll &&hasNextPage&& (
+          <button onClick={loadMore} className="my-4 mx-4">
+            Load More
+          </button>
+        )}
+      </div>
+    );
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
 type ColumnProps = {
   title: string;
   headingColor: string;

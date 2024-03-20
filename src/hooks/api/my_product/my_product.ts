@@ -11,7 +11,6 @@ async function getProducts({ pageParam }: { pageParam: number }) {
     const  response:Response  = await fetch(`${baseUrl}/product/select_my_all?size=5&page=${pageParam}`, {
         headers: getJWTHeader(userToken!.userToken),
     });
-    console.log(response)
     return response.json();
 }
 
