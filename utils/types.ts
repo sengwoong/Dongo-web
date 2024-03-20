@@ -1,47 +1,60 @@
-export interface Id {
+
+
+
+export interface User {
   id: number;
-  
-}
-
-export interface NewUser {
+  name: string;
   email: string;
-  name?: string;
-  address?: string;
-  phone?: string;
-  token?: string;
+  mobileNumber: string | null;
+  role: string;
+  createDt: string;
 }
 
-export type User = Id & NewUser;
 
-export interface Appointment extends Id {
-  dateTime: Date;
-  // this should be a treatmentId, which would be reasonable if this were
-  // a real db. For ease, I'm going to "cheat" and just give the name as
-  // a string here.
-  treatmentName: string;
-  //  userId is only present if the appointment is booked
-  userId?: number;
+interface Pageable {
+  pageNumber: number;
+  pageSize: number;
+  sort: {
+      sorted: boolean;
+      empty: boolean;
+      unsorted: boolean;
+  };
+  offset: number;
+  paged: boolean;
+  unpaged: boolean;
 }
 
-export type AppointmentDateMap = Record<number, Appointment[]>;
 
-export interface Image {
-  fileName: string;
-  authorName: string;
-  authorLink: string;
-  platformName: string;
-  platformLink: string;
+ 
+
+
+export interface Product {
+  id: number;
+  title: string;
+  content: string;
+  visible: boolean | null;
+  type: string;
+  downloadCount: number;
+  price: number;
+  createdAt: string;
+  user: User;
 }
 
-export interface Treatment extends Id {
-  name: string;
-  durationInMinutes: number;
-  image: Image;
-  description: string;
-}
 
-export interface Staff extends Id {
-  name: string;
-  treatmentNames: string[]; // in a more robust app, these might be treatment IDs
-  image: Image;
+export interface ProductResponse {
+  content: Product[];
+  pageable: Pageable;
+  last: boolean;
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+  sort: {
+      sorted: boolean;
+      empty: boolean;
+      unsorted: boolean;
+  };
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
 }

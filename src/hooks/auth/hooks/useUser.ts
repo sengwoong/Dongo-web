@@ -14,6 +14,7 @@ type UserResponse = {
 // 토근으로 유저의 아디를 들고오기 (뱍엔드에서 요청보내는듯)
 // 리플레쉬 토큰 을 던져줘서 새로로그인시킬수 있다.
 async function getUser(userId: number, userToken: string) {
+  console.log("애왜 실행됨? ")
   const { data }: AxiosResponse<{ user: User }> = await axiosInstance.get(
     `/user/token/${userId}`,
     {

@@ -3,7 +3,7 @@ import { baseUrl } from "./constants";
 
 
 export function getJWTHeader(userToken: string): Record<string, string> {
-  return { Authorization: `Bearer ${userToken}` };
+  return { Authorization: `${userToken}` };
 }
 
 const config: AxiosRequestConfig = { baseURL: baseUrl };

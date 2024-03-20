@@ -5,13 +5,18 @@ import React, {
     DragEvent,
     FormEvent,
     useEffect,
+    useRef,
   } from "react";
   import { FiPlus, FiTrash } from "react-icons/fi";
-  import { DragHandlers, motion } from "framer-motion";
+  import { motion } from "framer-motion";
   import { FaFire } from "react-icons/fa";
 import { useUpdateWordData, useWords } from "../hooks/api/my_word/my_word";
 import { ClipLoader } from "react-spinners";
 import LoadingBar from "./Portal/LoadingBar";
+import { useProducts } from "../hooks/api/my_product/my_product";
+import { Product } from "../../utils/types";
+import InfiniteScroll from "react-infinite-scroller";
+
   export const CustomKanban = () => {
     return (
       <div className="min-h-screen w-screen flex flex-col justify-center items-center bg-neutral-900 text-neutral-50">
@@ -20,8 +25,61 @@ import LoadingBar from "./Portal/LoadingBar";
     );
   };
 
+
+
+
+
+
+
+  export default function ProductList() {
+    const { data: products, fetchNextPage, hasNextPage, isFetching: isLoading } = useProducts();
+  
+    const loadMore = () => {
+      if (hasNextPage && !isLoading) {
+        fetchNextPage();
+      }
+    };
+  
+    if (isLoading && !products) {
+      return <div>Loading...</div>;
+    }
+  
+    if (!products || products.pages.length === 0) {
+      return <div>No products available</div>;
+    }
+  
+    return (
+      <div
+        
+      >
+        <div className="max-w-full mt-96 z-50 flex">
+          {products.pages.map((pageData, pageIndex) => ( // 페이지 데이터와 페이지 인덱스를 매핑
+            <div key={pageIndex} > {/* 페이지 인덱스를 키로 사용 */}
+              {pageData.content.map((product: any, productIndex: number) => ( // 결과 데이터와 결과 인덱스를 매핑
+                <div key={productIndex} className="my-4 mx-4">
+                  <h3>{product.title}</h3>
+                  <p>{product.content}</p>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  
+
+
+
+
+
+
+
   const Board = () => {
     const { word, isLoading, isError } = useWords(3); // ProductId로 3을 전달하여 useWords를 호출합니다.
+    
+
     const [cards, setCards] = useState<CardType[]>([]); // 초기값을 빈 배열로 설정
 
     useEffect(() => {
@@ -46,7 +104,9 @@ import LoadingBar from "./Portal/LoadingBar";
   // 입력에 단어및 내용넣게하기
   // 끝나면 뮤테이트로 해당값을넣거 디비에서 handleDragEnd 에서 값을바꾸기
     return (
-      <div className="flex h-ful  select-none gap-3  p-12">
+      <div className="flex flex-col h-full  select-none gap-3  p-12">
+        <div className="flex h-32 justify-center items-center"> <ProductList></ProductList></div>
+        <div className="flex">
         <Column
           title="TODO"
           column={3}
@@ -71,6 +131,7 @@ import LoadingBar from "./Portal/LoadingBar";
         <BurnBarrel setCards={function (value: React.SetStateAction<CardType[]>): void {
           throw new Error("Function not implemented.");
         } }   />
+        </div>
       </div>
     );
   };
@@ -90,22 +151,16 @@ const Column = ({
   headingColor,
   cards,
   column,
-  setCards,
 }: ColumnProps) => {
   const [active, setActive] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [change, setChange] = useState(false);
   const updateWordData = useUpdateWordData();
   // 드래그 시작 시 호출되는 함수
   const handleDragStart = (e: DragEvent, card: CardType) => {
     e.dataTransfer.setData("cardId", card.wordLocal.toString());
   };
 
-
-
-
   const update = async (column:number, before:string, cardId:string) => {
-
     // 뮤테이트할떄 키값 안받아옴
     try {
       await updateWordData({ productId: column, before, cardId });
@@ -115,7 +170,6 @@ const Column = ({
   }
   }
   
-
   // 드래그 종료 시 호출되는 함수
 const handleDragEnd = async (e: DragEvent) => {
   // 업데이트 중인 경우 동작하지 않음
@@ -123,7 +177,6 @@ const handleDragEnd = async (e: DragEvent) => {
     return;
   }
   
-
   // 드래그된 카드의 ID 가져오기
   const cardId = e.dataTransfer.getData("cardId");
   setIsUpdating(true);
@@ -134,7 +187,7 @@ const handleDragEnd = async (e: DragEvent) => {
   const indicators = getIndicators();
   const { element } = getNearestIndicator(e, indicators);
   const before = element.dataset.before || "-1";
-
+  // #강의용입니다.
   // 미리보기 (실행과정 Js)
   // let updatedTasks;
 
@@ -169,28 +222,22 @@ const handleDragEnd = async (e: DragEvent) => {
   }
 };
 
-
-
-
-
+  // #강의용입니다.
   // 카드의 순서를 초기화하는 함수
-  const reset = (cards: CardType[], cardId: string) => {
-    let maxWordId = 0;
-    if (cards.length > 0) {
-      maxWordId = Math.max(...cards.map((card) => card.wordLocal)) + 1;
-    }
+  // const reset = (cards: CardType[], cardId: string) => {
+  //   let maxWordId = 0;
+  //   if (cards.length > 0) {
+  //     maxWordId = Math.max(...cards.map((card) => card.wordLocal)) + 1;
+  //   }
 
-    return cards.map((card) => {
-      if (card.wordLocal.toString() === cardId) {
-        return { ...card, wordLocal: maxWordId };
-      } else {
-        return { ...card };
-      }
-    });
-  };
-
-
-
+  //   return cards.map((card) => {
+  //     if (card.wordLocal.toString() === cardId) {
+  //       return { ...card, wordLocal: maxWordId };
+  //     } else {
+  //       return { ...card };
+  //     }
+  //   });
+  // };
 
 
     const handleDragOver = (e: DragEvent) => {
