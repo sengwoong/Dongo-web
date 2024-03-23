@@ -26,8 +26,9 @@ import useDragProduct from '../../utils/zustant/useDragProduct'
 
   const Board = () => {
     const { word, isLoading, isError } = useWords(3); // ProductId로 3을 전달하여 useWords를 호출합니다.
-    
-
+    const { productsNum } = useDragProduct();
+    console.log("productsNum")
+    console.log(productsNum)
     const [cards, setCards] = useState<CardType[]>([]); // 초기값을 빈 배열로 설정
     const [drop, setDrop] = useState<Number|null>(); // 초기값을 빈 배열로 설정
     useEffect(() => {
@@ -58,8 +59,8 @@ import useDragProduct from '../../utils/zustant/useDragProduct'
         </div>
         <div className="flex w-screen  justify-around ">
           <DropMenu >
-          <ColumnDrop ></ColumnDrop>
-          <ColumnDrop ></ColumnDrop> 
+          <ColumnDrop columnId={1}></ColumnDrop>
+          <ColumnDrop columnId={2}></ColumnDrop> 
           <BurnBarrelDrop></BurnBarrelDrop>
           </DropMenu>
       
@@ -172,52 +173,55 @@ import useDragProduct from '../../utils/zustant/useDragProduct'
     );
   }
 
-  // -----------
-  function ColumnDrop() {
-    const handleDragEnd = async (e:React.DragEvent<HTMLDivElement>) => {
-      console.log("handleDragEnd2");
-      console.log(e);
+function ColumnDrop({ columnId }: { columnId: number }) {
+  const { updateProductNum } = useDragProduct();
 
-      const el = e.currentTarget;
-      el.style.border = "none";
+  const handleDragEnd = async (e: React.DragEvent<HTMLDivElement>) => {
+    console.log("handleDragEnd2");
+    console.log(e);
+    const el = e.currentTarget;
+    el.style.border = "none";
+
+    const product = e.dataTransfer.getData("productId");
+    console.log("productId")
+    const productParse = JSON.parse(product);
+    const productId = productParse.id;
+
+    console.log(productId)
+    console.log("columnId,Number(productId)")
+    console.log(columnId, Number(productId))
+    updateProductNum(columnId, Number(productId))
+
+    console.log(productId)
+    console.log(productId)
+    console.log(productId)
+
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    // Get the element being dragged over
+    const el = e.currentTarget;
+    // Add a CSS class to highlight the element
+    el.style.border = "2px solid yellow"
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    el.style.border = "none";
+  };
+
+  return (
+    <DropZone
+      onDrop={handleDragEnd}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+      onDragLeave={handleDragLeave} 
+    />
+  );
+}
 
 
-               
-    const cardId = e.dataTransfer.getData("productId");
-    console.log("handleDragEnd")
-    console.log("handleDragEnd")
-    console.log(cardId)
-    console.log(cardId)
-    console.log(cardId)
-
-
-    };
-
-  
-    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      // Get the element being dragged over
-      const el = e.currentTarget;
-      // Add a CSS class to highlight the element
-      el.style.border = "2px solid yellow"
-    };
-  
-    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-      const el = e.currentTarget;
-
-
-      el.style.border = "none";
-    };
-  
-    return (
-      <DropZone
-        onDrop={handleDragEnd}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-        onDragLeave={handleDragLeave} // Add onDragLeave event handler
-      />
-    );
-  }
 
   
 
