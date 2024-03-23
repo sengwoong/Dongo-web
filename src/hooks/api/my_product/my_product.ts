@@ -48,8 +48,8 @@ export function useProducts() {
 // getNextPageParam 함수 내에서 반환된 값을 로그로 출력
 
 
-    console.log("마지막데이터");
-    console.log(data);
+    // console.log("마지막데이터");
+    // console.log(data);
     
     return { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status };
 }

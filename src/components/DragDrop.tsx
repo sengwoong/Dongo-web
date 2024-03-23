@@ -13,7 +13,7 @@ import React, {
 import { useUpdateWordData, useWords } from "../hooks/api/my_word/my_word";
 import LoadingBar from "./Portal/LoadingBar";
 import { useProducts } from "../hooks/api/my_product/my_product";
-
+import useDragProduct from '../../utils/zustant/useDragProduct'
   export const CustomKanban = () => {
     return (
       <div className="min-h-screen w-screen flex flex-col justify-center items-center bg-neutral-900 text-neutral-50">
@@ -29,7 +29,7 @@ import { useProducts } from "../hooks/api/my_product/my_product";
     
 
     const [cards, setCards] = useState<CardType[]>([]); // 초기값을 빈 배열로 설정
-
+    const [drop, setDrop] = useState<Number|null>(); // 초기값을 빈 배열로 설정
     useEffect(() => {
       if (word) {
         setCards(word);
@@ -46,13 +46,23 @@ import { useProducts } from "../hooks/api/my_product/my_product";
   }
 
 
+  
+
   // 컬럼은 최대 3개까지해서 드래그드롭으로 단어장끌고와서 옮기기 가능하게하기 이떄 가로스크롤하기
   // 입력에 단어및 내용넣게하기
   // 끝나면 뮤테이트로 해당값을넣거 디비에서 handleDragEnd 에서 값을바꾸기
     return (
       <div className="flex flex-col h-full  select-none gap-3  p-12 max-w-screen justify-center items-center">
-        <div className="flex h-32 justify-center items-center max-w-prose "> <ProductList></ProductList></div>
+        <div className="flex h-32 justify-center items-center max-w-prose "> 
+        <ProductList></ProductList>
+        </div>
         <div className="flex w-screen  justify-around ">
+          <DropMenu >
+          <ColumnDrop ></ColumnDrop>
+          <ColumnDrop ></ColumnDrop> 
+          <BurnBarrelDrop></BurnBarrelDrop>
+          </DropMenu>
+      
         <Column
           title="TODO"
           column={3}
@@ -79,39 +89,48 @@ import { useProducts } from "../hooks/api/my_product/my_product";
 
   
 
-  
   export default function ProductList() {
     const { data: products, fetchNextPage, hasNextPage, isFetching: isLoading } = useProducts();
     const [isEndOfScroll, setIsEndOfScroll] = useState(true);
-    const productListRef = useRef<HTMLDivElement>(null);
-    const [scrollLeft, setScrollLeft] = useState(0);
-    console.log("products")
-    console.log("products")
-    console.log(products)
-    console.log(products)
-    const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
 
+    const { isDragging, startDragging, stopDragging } = useDragProduct();
+
+    const productListRef = useRef<HTMLDivElement>(null);
   
-        const productListElement = productListRef.current;
-        if (productListElement) {
-          const { scrollLeft, scrollWidth, clientWidth } = productListElement;
-  
-          console.log(scrollLeft > scrollWidth-clientWidth-((scrollWidth-clientWidth)/10))
-          // 현재 스크롤된 가로 위치를 계산하여 전체 가로 스크롤 너비의 90%에 도달했을 때 처리
-          if (scrollLeft > scrollWidth-clientWidth-((scrollWidth-clientWidth)/10)) {
-  
-    
-              loadMore();
-           
-          } 
+    const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+      const productListElement = productListRef.current;
+      if (productListElement) {
+        const { scrollLeft, scrollWidth, clientWidth } = productListElement;
+        if (scrollLeft > scrollWidth - clientWidth - ((scrollWidth - clientWidth) / 10)) {
+          loadMore();
         }
       }
+    };
   
     const loadMore = () => {
       if (hasNextPage && !isLoading) {
         fetchNextPage();
       }
     };
+  
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, product: any) => {
+
+            e.dataTransfer.setData('productId', JSON.stringify(product)); // 드래그하는 상품 데이터를 설정합니다.
+            console.log(isDragging)
+            const cardId = e.dataTransfer.getData("productId");
+
+            console.log("handleDragStart")
+            console.log(cardId)
+            
+            startDragging()
+    };
+  
+
+
+    const handleDragEnd = () => {
+      console.log("handleDragEnd");
+      stopDragging();
+  };
   
     if (isLoading && !products) {
       return <div>Loading...</div>;
@@ -122,14 +141,21 @@ import { useProducts } from "../hooks/api/my_product/my_product";
     }
   
     return (
-      <div className="z-50 flex  max-w-prose  overflow-scroll" ref={productListRef}
-       onWheel={handleWheel}
-       >
-  
+      <div
+        className="z-50 flex max-w-prose overflow-scroll"
+        ref={productListRef}
+        onWheel={handleWheel}
+        onDragEnd={handleDragEnd}
+      >
         {products.pages.map((pageData, pageIndex) => (
-          <div key={pageIndex} className="flex  flex-no-wrap">
+          <div key={pageIndex} className="flex flex-no-wrap">
             {pageData.content.map((product: any, productIndex: number) => (
-              <div key={productIndex} className="my-4 w-24 mx-4">
+              <div
+                key={productIndex}
+                className="my-4 w-24 mx-4"
+                draggable // 드래그 가능하도록 설정합니다.
+                onDragStart={(e) => handleDragStart(e, product)}
+              >
                 <h3>{product.title}</h3>
                 <p>{product.content}</p>
               </div>
@@ -137,7 +163,7 @@ import { useProducts } from "../hooks/api/my_product/my_product";
           </div>
         ))}
   
-        {isEndOfScroll &&hasNextPage&& (
+        {isEndOfScroll && hasNextPage && (
           <button onClick={loadMore} className="my-4 mx-4">
             Load More
           </button>
@@ -145,12 +171,79 @@ import { useProducts } from "../hooks/api/my_product/my_product";
       </div>
     );
   }
+
+  // -----------
+  function ColumnDrop() {
+    const handleDragEnd = async (e:React.DragEvent<HTMLDivElement>) => {
+      console.log("handleDragEnd2");
+      console.log(e);
+
+      const el = e.currentTarget;
+      el.style.border = "none";
+
+
+               
+    const cardId = e.dataTransfer.getData("productId");
+    console.log("handleDragEnd")
+    console.log("handleDragEnd")
+    console.log(cardId)
+    console.log(cardId)
+    console.log(cardId)
+
+
+    };
+
+  
+    const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      // Get the element being dragged over
+      const el = e.currentTarget;
+      // Add a CSS class to highlight the element
+      el.style.border = "2px solid yellow"
+    };
+  
+    const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+      const el = e.currentTarget;
+
+
+      el.style.border = "none";
+    };
+  
+    return (
+      <DropZone
+        onDrop={handleDragEnd}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+        onDragLeave={handleDragLeave} // Add onDragLeave event handler
+      />
+    );
+  }
+
   
 
 
+function DropZone({ onDrop, onDragOver, onDragEnd, onDragLeave}: any) {
+  return (
+    <div
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      onDragEnd={onDragEnd}
+      onDragLeave={onDragLeave} // Pass onDragLeave event handler
+      className="w-28 shrink-0 md:w-56 h-full min-h-screen z-50 bg-light-200"
+    ></div>
+  );
+}
 
 
+function BurnBarrelDrop() {
+  return (
+    <div className={` mt-10 grid h-56 w-56 shrink-0 place-content-center rounded border text-3xl`}></div>
+  );
+}
 
+function DropMenu({ children }: { children: React.ReactNode }) {
+  return <div className="w-screen  justify-around absolute flex ">{children}</div>;
+}
 
 
 
@@ -178,6 +271,8 @@ const Column = ({
   // 드래그 시작 시 호출되는 함수
   const handleDragStart = (e: DragEvent, card: CardType) => {
     e.dataTransfer.setData("cardId", card.wordLocal.toString());
+
+    console.log("컬럼카드 드래그스타트")
   };
 
   const update = async (column:number, before:string, cardId:string) => {
@@ -192,13 +287,20 @@ const Column = ({
   
   // 드래그 종료 시 호출되는 함수
 const handleDragEnd = async (e: DragEvent) => {
+  console.log("컬럼카드 드래그 끝")
+  
   // 업데이트 중인 경우 동작하지 않음
   if (isUpdating) {
     return;
   }
   
+  
   // 드래그된 카드의 ID 가져오기
   const cardId = e.dataTransfer.getData("cardId");
+  if (!cardId) {
+    return;
+  }
+
   setIsUpdating(true);
   setActive(false);
   clearHighlights();
@@ -207,28 +309,7 @@ const handleDragEnd = async (e: DragEvent) => {
   const indicators = getIndicators();
   const { element } = getNearestIndicator(e, indicators);
   const before = element.dataset.before || "-1";
-  // #강의용입니다.
-  // 미리보기 (실행과정 Js)
-  // let updatedTasks;
-
-  // // 드롭된 위치가 컬럼 상단인 경우
-  // if (Number(before) === -1) {
-  //   updatedTasks = reset(cards, cardId);
-  // } else {
-  //   // 컬럼 내부에서의 위치 변경인 경우
-  //   updatedTasks = cards.map((card) => {
-  //     if (card.wordLocal.toString() === cardId) {
-  //       return { ...card, wordLocal: Number(before) };
-  //     } else if (card.wordLocal.toString() === before) {
-  //       return { ...card, wordLocal: Number(cardId) };
-  //     }
-  //     return card;
-  //   });
-  // }
-
-  // 업데이트된 카드 상태 설정
-  // setCards(updatedTasks);
-
+  
   try {
     // 백엔드로 업데이트 요청 보내기
     await update(column, before, cardId);
@@ -242,25 +323,9 @@ const handleDragEnd = async (e: DragEvent) => {
   }
 };
 
-  // #강의용입니다.
-  // 카드의 순서를 초기화하는 함수
-  // const reset = (cards: CardType[], cardId: string) => {
-  //   let maxWordId = 0;
-  //   if (cards.length > 0) {
-  //     maxWordId = Math.max(...cards.map((card) => card.wordLocal)) + 1;
-  //   }
-
-  //   return cards.map((card) => {
-  //     if (card.wordLocal.toString() === cardId) {
-  //       return { ...card, wordLocal: maxWordId };
-  //     } else {
-  //       return { ...card };
-  //     }
-  //   });
-  // };
-
 
     const handleDragOver = (e: DragEvent) => {
+      console.log("컬럼카드 드래그 handleDragOver")
       e.preventDefault();
       highlightIndicator(e);
       setActive(true);
@@ -300,6 +365,7 @@ const handleDragEnd = async (e: DragEvent) => {
       
 // 근처에있니?
     const getNearestIndicator = (e: DragEvent, indicators: HTMLElement[]) => {
+      console.log("컬럼카드 드래그 getNearestIndicator")
       const DISTANCE_OFFSET = 50;
   
       const el = indicators.reduce(
