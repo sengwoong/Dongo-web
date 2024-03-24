@@ -6,7 +6,7 @@ import useDragProduct from "../../../utils/zustant/useDragProduct";
 export default function ProductList() {
     const { data: products, fetchNextPage, hasNextPage, isFetching: isLoading } = useProducts();
     const [isEndOfScroll, setIsEndOfScroll] = useState(true);
-
+    const { productsNum } = useDragProduct();
     const { isDragging, startDragging, stopDragging } = useDragProduct();
 
     const productListRef = useRef<HTMLDivElement>(null);
@@ -32,6 +32,7 @@ export default function ProductList() {
     };
   
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>, product: any) => {
+
             e.dataTransfer.setData('productId', JSON.stringify(product)); // 드래그하는 상품 데이터를 설정합니다.
             const cardId = e.dataTransfer.getData("productId");
             startDragging()
@@ -49,6 +50,18 @@ export default function ProductList() {
       return <div>No products available</div>;
     }
   
+    // Filter out duplicate products
+  const uniqueProducts = products.pages.reduce((acc, pageData) => {
+    const uniqueContent = pageData.content.filter((product: any) => !acc.some((p: any) => p.id === product.id));
+    return [...acc, ...uniqueContent];
+  }, []);
+
+
+
+  
+
+
+
     return (
       <div
         className="z-50 flex max-w-prose overflow-scroll"
@@ -56,21 +69,28 @@ export default function ProductList() {
         onWheel={handleWheel}
         onDragEnd={handleDragEnd}
       >
-        {products.pages.map((pageData, pageIndex) => (
-          <div key={pageIndex} className="flex flex-no-wrap">
-            {pageData.content.map((product: any, productIndex: number) => (
-              <div
-                key={productIndex}
-                className="my-4 w-24 mx-4"
-                draggable // 드래그 가능하도록 설정합니다.
-                onDragStart={(e) => handleDragStart(e, product)}
-              >
-                <h3>{product.title}</h3>
-                <p>{product.content}</p>
-              </div>
-            ))}
+      {products.pages.map((pageData, pageIndex) => (
+  <div key={pageIndex} className="flex flex-no-wrap">
+    {pageData.content.map((product: any, productIndex: number) => {
+      // productsNum의 각 요소와 현재 제품의 ID가 다른 경우에만 제품을 표시
+      if (product.id !== productsNum[1] && product.id !== productsNum[2]) {
+        return (
+          <div
+            key={productIndex}
+            className="my-4 w-24 mx-4"
+            draggable // 드래그 가능하도록 설정합니다.
+            onDragStart={(e) => handleDragStart(e, product)}
+          >
+            <h3>{product.title}</h3>
+            <p>{product.content}</p>
           </div>
-        ))}
+        );
+      }
+      return null; // productsNum 배열의 요소와 동일한 ID를 가진 제품은 표시하지 않음
+    })}
+  </div>
+))}
+        
   
         {isEndOfScroll && hasNextPage && (
           <button onClick={loadMore} className="my-4 mx-4">
