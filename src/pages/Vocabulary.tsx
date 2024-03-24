@@ -1,5 +1,5 @@
 import React from "react";
-import { CustomKanban } from "../components/DragDrop";
+import { CustomKanban } from "../components/DragDropKanban/DragDropKanban";
 
 function Vocabulary() {
   return(

@@ -58,3 +58,23 @@ export interface ProductResponse {
   numberOfElements: number;
   empty: boolean;
 }
+
+
+export type CardType = {
+  word_id: number;
+  word: string;
+  definition:string;
+  product_id: number;
+  wordLocal:number
+};
+export interface CardList {
+  id: string;
+  word: CardType[];
+}
+export interface WordData {
+  word: CardType[];
+  isLoading: boolean;
+  isError: boolean;
+}
+
+

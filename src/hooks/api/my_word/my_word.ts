@@ -10,6 +10,7 @@ async function getWords(productId:number) {
   async function exchangeWords(productId: number, before: string, cardId: string) {
     try {
         const { data } = await axiosInstance.post(`word/update/exchange/${productId}`, { "prevId":before, "currentId":cardId });
+        console.log(data)
         return data;
     } catch (error) {
         console.error("Failed to exchange words:", error);
@@ -19,7 +20,7 @@ async function getWords(productId:number) {
 
 
   export function useWords(productId:number) {
-  
+
     const queryClient = useQueryClient();
     useEffect(() => {
       // assume increment of one month
@@ -31,7 +32,11 @@ async function getWords(productId:number) {
         queryFn: () => getWords(productId)
       });
     }, [productId]);
-  
+
+
+ 
+
+    
     const { data: word , isLoading, isError } = useQuery({
       queryKey: [queryKeys.myWord, productId],
       queryFn: () => getWords(productId),
@@ -39,7 +44,6 @@ async function getWords(productId:number) {
       refetchInterval: 60000, // every minute
     });
 
-  
     return { word, isLoading, isError };
   }
   
