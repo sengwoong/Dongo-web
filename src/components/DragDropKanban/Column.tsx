@@ -19,8 +19,6 @@ type ColumnProps = {
     cards,
     column,
   }: ColumnProps) => {
-    console.log("cardscards")
-    console.log(cards)
     const [active, setActive] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const updateWordData = useUpdateWordData();

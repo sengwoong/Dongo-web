@@ -6,10 +6,7 @@ type CardProps = CardType & {
   };
   
   export const Card = ({ word,definition, wordLocal, column, handleDragStart }: CardProps) => {
-    console.log( "word,definition")
-    console.log( word,definition)
-    console.log( word,definition)
-    console.log( word,definition)
+
     return (
       <>
         <DropIndicator beforeId={wordLocal.toString()} column={column} />

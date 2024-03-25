@@ -7,6 +7,7 @@ interface DragProductState {
   stopDragging: () => void;
   productsNum: { [key: number]: number|null };
   updateProductNum: (productId: number, quantity: number) => void;
+
 }
 
 const useDragProduct = create<DragProductState>(set => ({

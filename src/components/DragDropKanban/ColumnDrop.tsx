@@ -2,7 +2,7 @@ import useDragProduct from "../../../utils/zustant/useDragProduct";
 import { DropZone } from "./DropZone/DropZone";
 
 export function ColumnDrop({ columnId }: { columnId: number }) {
-    const { updateProductNum } = useDragProduct();
+    const { updateProductNum ,stopDragging} = useDragProduct();
   
     const handleDragEnd = async (e: React.DragEvent<HTMLDivElement>) => {
       const el = e.currentTarget;
@@ -13,7 +13,7 @@ export function ColumnDrop({ columnId }: { columnId: number }) {
       const productId = productParse.id;
   
       updateProductNum(columnId, Number(productId))
-  
+      stopDragging();
     };
   
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -48,7 +48,14 @@ export function ColumnDrop({ columnId }: { columnId: number }) {
   }
   
   export function DropMenu({ children }: { children: React.ReactNode }) {
-    return <div className="w-screen  justify-around absolute flex ">{children}</div>;
+    const { isDragging } = useDragProduct();
+    console.log("isDragging")
+  console.log(isDragging)
+    return (
+      <div className={`w-screen justify-around absolute flex ${isDragging ? '' : 'hidden'}`}>
+        {children}
+      </div>
+    );
   }
   
   

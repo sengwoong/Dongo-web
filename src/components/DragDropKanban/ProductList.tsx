@@ -1,14 +1,14 @@
-import { useRef, useState } from "react";
-import { useProducts } from "../../hooks/api/my_product/my_product";
+import { useRef } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
+import { useProductFetching } from "./ProductApi/prodcut_api";
 
 
 export default function ProductList() {
-    const { data: products, fetchNextPage, hasNextPage, isFetching: isLoading } = useProducts();
-    const [isEndOfScroll, setIsEndOfScroll] = useState(true);
-    const { productsNum } = useDragProduct();
-    const { isDragging, startDragging, stopDragging } = useDragProduct();
+    const {  products, fetchNextPage, hasNextPage,  isLoading } = useProductFetching();
 
+    const { productsNum } = useDragProduct();
+    const {  startDragging, stopDragging } = useDragProduct();
+    useProductFetching();
     const productListRef = useRef<HTMLDivElement>(null);
   
     const handleDragEnd = () => {
@@ -50,15 +50,6 @@ export default function ProductList() {
       return <div>No products available</div>;
     }
   
-    // Filter out duplicate products
-  const uniqueProducts = products.pages.reduce((acc, pageData) => {
-    const uniqueContent = pageData.content.filter((product: any) => !acc.some((p: any) => p.id === product.id));
-    return [...acc, ...uniqueContent];
-  }, []);
-
-
-
-  
 
 
 
@@ -92,7 +83,7 @@ export default function ProductList() {
 ))}
         
   
-        {isEndOfScroll && hasNextPage && (
+        {  hasNextPage && (
           <button onClick={loadMore} className="my-4 mx-4">
             Load More
           </button>
