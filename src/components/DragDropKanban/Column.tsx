@@ -9,7 +9,7 @@ type ColumnProps = {
     title: string;
     headingColor: string;
     cards: CardType[];
-    column: number;
+    productId: number;
     setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
   };
   
@@ -17,7 +17,7 @@ type ColumnProps = {
     title,
     headingColor,
     cards,
-    column,
+    productId,
   }: ColumnProps) => {
     const [active, setActive] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -31,22 +31,15 @@ type ColumnProps = {
         console.log("컬럼카드 드래그스타트");
       };
   
-    const update = async (column:number, before:string, cardId:string) => {
+    const update = async (prodcutId:number, before:string, cardId:string) => {
       // 뮤테이트할떄 키값 안받아옴
       try {
-        await updateWordData({ productId: column, before, cardId });
+        await updateWordData({ productId: prodcutId, before, cardId });
         // 성공했을 때 다른 작업 수행
     } catch (error) {
        //했을 때 상태를 변경하여 강제로 리렌더링 유도
     }
     }
-    
-
-
-
-
-
-
 
     // 드래그 종료 시 호출되는 함수
 const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
@@ -78,7 +71,7 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
   
     try {
       // 백엔드로 업데이트 요청 보내기
-      await update(column, before, cardId);
+      await update(productId, before, cardId);
       console.log("Update successful!");
     } catch (error) {
       console.error("Update failed:", error);
@@ -89,18 +82,7 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
     }
   };
   
-
-
-  
-
-
-
-
-
-
-  
       const handleDragOver = (e:any) => {
-        console.log("컬럼카드 드래그 handleDragOver")
         e.preventDefault();
         highlightIndicator(e);
         setActive(true);
@@ -120,7 +102,9 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
         clearHighlights(indicators);
     
         const el = getNearestIndicator(e, indicators);
-    
+      if(el.element.style.opacity == undefined ){
+        return
+      }
         el.element.style.opacity = "1";
       };
       const removeTransformFromElements = () => {
@@ -134,13 +118,8 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
           });
         };
         
-        
-  
-  
-        
   // 근처에있니?
       const getNearestIndicator = (e:any, indicators: HTMLElement[]) => {
-        console.log("컬럼카드 드래그 getNearestIndicator")
         const DISTANCE_OFFSET = 50;
     
         const el = indicators.reduce(
@@ -167,7 +146,7 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
       const getIndicators = () => {
         return Array.from(
           document.querySelectorAll(
-            `[data-column="${column}"]`
+            `[data-column="${productId}"]`
           ) as unknown as HTMLElement[]
         );
       };
@@ -177,7 +156,7 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
         setActive(false);
       };
   
-      const filteredCards = cards.filter((c) => c.product_id === column);
+      const filteredCards = cards.filter((c) => c.product_id === productId);
     
       return (
        
@@ -199,11 +178,11 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
               active ? "bg-neutral-800/50" : "bg-neutral-800/0"
             }`}
           >
-            {filteredCards.sort((a, b) => a.wordLocal - b.wordLocal).map((c) => {
-              return <Card column={c.product_id} key={c.wordLocal} {...c} handleDragStart={handleDragStart} />;
+            {filteredCards.sort((a, b) => a.wordLocal - b.wordLocal).map((c,index) => {
+              return <Card productId={c.product_id} key={index} {...c} handleDragStart={handleDragStart} />;
             })}
-            <DropIndicator beforeId={null} column={column} />
-            <AddCard column={column}/>
+            <DropIndicator beforeId={null} productId={productId} />
+            <AddCard productId={productId}/>
           </div>
         </div>
       );

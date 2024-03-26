@@ -3,6 +3,7 @@ import { axiosInstance } from "../../../../utils/axiosInstance";
 import { useQuery, useQueryClient ,useMutation,useMutationState} from "@tanstack/react-query";
 import { queryKeys } from "../../../../utils/react_query/constants";
 
+
 async function getWords(productId:number) {
     const { data } = await axiosInstance.get(`word/select_all/${productId}`);
     return data;
@@ -33,10 +34,6 @@ async function getWords(productId:number) {
       });
     }, [productId]);
 
-
- 
-
-    
     const { data: word , isLoading, isError } = useQuery({
       queryKey: [queryKeys.myWord, productId],
       queryFn: () => getWords(productId),
@@ -48,21 +45,11 @@ async function getWords(productId:number) {
   }
   
 
-
-  
   type UpdateWordDataParams = {
     productId: number;
     before: string;
     cardId: string;
   };
-
-  
-
-
-
-
-
-
 
 
 export function useUpdateWordData() {
@@ -80,17 +67,35 @@ export function useUpdateWordData() {
 }
 
 
+type CreateWordDataParams = {
+  productId: number;
+  wordText: string;
+  definition: string;
+};
 
-//   // // 단어 업데이트 함수
-//   // const updateWordData = async (productId:string,before: string, cardId: string) => {
-//   //   // 백엔드로 데이터 업데이트 요청
-//   //   const success = await updateWords(productId, before, cardId);
-//   //   if (success) {
-//   //       // 업데이트 성공시 쿼리 다시 불러오기
-//   //       refetch();
-//   //   } else {
-//   //       // 업데이트 실패 시 롤백 또는 에러 처리
-//   //       console.error("Word update failed.");
-//   //       // 롤백 또는 에러 처리 로직을 추가하세요.
-//   //   }
-// };
+
+export  function useCreateWordData() {
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation<void, unknown, CreateWordDataParams>({
+    mutationFn: ({  productId, wordText, definition}) =>   createWord(productId, wordText, definition),
+    onSuccess: (_, variables) => {
+      const { productId } = variables;
+      queryClient.invalidateQueries({ queryKey: [queryKeys.myWord, productId] });
+    }
+  });
+  return mutate;
+}
+
+async function createWord(productId: number, wordText: string, definition: string) {
+  try {
+      const response = await axiosInstance.post(`/word/create/${productId}`, {
+          word: wordText.trim(),
+          definition: definition.trim(),
+      });
+
+      console.log(response);
+  } catch (error) {
+      console.error("Error adding card:", error);
+  }
+}

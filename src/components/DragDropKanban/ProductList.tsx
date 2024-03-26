@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
-import { useProductFetching } from "./ProductApi/prodcut_api";
+import { useProductFetching } from "../../hooks/api/my_product/my_product";
+
 
 
 export default function ProductList() {
     const {  products, fetchNextPage, hasNextPage,  isLoading } = useProductFetching();
 
-    const { productsNum } = useDragProduct();
-    const {  startDragging, stopDragging } = useDragProduct();
+    const {  productsNum,startDragging, stopDragging } = useDragProduct();
     useProductFetching();
     const productListRef = useRef<HTMLDivElement>(null);
   
@@ -38,10 +38,6 @@ export default function ProductList() {
             startDragging()
     };
   
-
-
-    
-  
     if (isLoading && !products) {
       return <div>Loading...</div>;
     }
@@ -50,9 +46,6 @@ export default function ProductList() {
       return <div>No products available</div>;
     }
   
-
-
-
     return (
       <div
         className="z-50 flex max-w-prose overflow-scroll"

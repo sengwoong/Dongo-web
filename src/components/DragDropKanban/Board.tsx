@@ -6,7 +6,8 @@ import ProductList from "./ProductList";
 import { BurnBarrelDrop, ColumnDrop, DropMenu } from "./ColumnDrop";
 import { Column } from "./Column";
 import { BurnBarrel } from "./BurnBarrel";
-import { useProductFetching } from "./ProductApi/prodcut_api";
+import { useProductFetching } from "../../hooks/api/my_product/my_product";
+
 
 interface ProductType {
   id: number | null;
@@ -21,7 +22,6 @@ interface ProductType {
 }
 
 
-
 export const Board: React.FC = () => {
   const { productsNum } = useDragProduct();
   const [card1, setCard1] = useState<CardType[]>([]);
@@ -34,21 +34,10 @@ export const Board: React.FC = () => {
   const { word: words2, isLoading: isLoading2, isError: isError2 } = useWords(productsNum[2] || 0);
 
 const { allProducts } =useProductFetching()
-console.log("title1")
-console.log("title1")
-console.log("title1")
-console.log(title1)
-console.log("title2")
-console.log("title2")
-console.log("title2")
-console.log(title2)
-// console.log(allProducts)
-// console.log(allProducts)
-// console.log(productsNum[1],productsNum[2])
+
+
 useEffect(() => {
   if (allProducts !== null) {
-    console.log("productTitles");
-
     const newTitle1 = allProducts.filter((x) => x.id === productsNum[1]);
     const newTitle2 = allProducts.filter((x) => x.id === productsNum[2]);
     setTitle1(newTitle1);
@@ -81,14 +70,14 @@ useEffect(() => {
         </DropMenu>
         <Column
           title={title1.length > 0 ? title1[0].content : "드래그를 하여 불러오세요"}
-          column={productsNum[1]!}
+          productId={productsNum[1]!}
           headingColor="text-yellow-200"
           cards={card1}
           setCards={setCard1}
         />
         <Column
           title={title2.length > 0 ? title2[0].content : "드래그를 하여 불러오세요"}
-          column={productsNum[2]!}
+          productId={productsNum[2]!}
           headingColor="text-blue-200"
           cards={card2}
           setCards={setCard2}

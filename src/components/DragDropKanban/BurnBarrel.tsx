@@ -19,6 +19,7 @@ import { FiTrash } from "react-icons/fi";
   // todo 단어 지우기
         console.log("쓰레기 통으로")
       const cardId = e.dataTransfer.getData("cardId");
+      console.log(cardId)
       // setCards((pv) => pv.filter((c) => c.product_id.toString() !== cardId));
   
       setActive(false);

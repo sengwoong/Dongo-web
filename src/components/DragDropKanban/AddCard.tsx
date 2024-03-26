@@ -1,42 +1,47 @@
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import { FiPlus } from "react-icons/fi";
+import { useCreateWordData } from "../../hooks/api/my_word/my_word";
+
 
 type AddCardProps = {
-    column: number;
+  productId: number;
   };
   
- export const AddCard = ({ column }: AddCardProps) => {
-    const [text, setText] = useState("");
+ export const AddCard = ({ productId }: AddCardProps) => {
+    const [wordText, setWordText] = useState("");
+    const [definition, setDefinition] = useState("");
     const [adding, setAdding] = useState(false);
-  
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const createWord = useCreateWordData();
+   
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
   
-      if (!text.trim().length) return;
+      if (!wordText.trim().length || !definition.trim().length) return;
   
-      const newCard = {
-        column,
-        title: text.trim(),
-        id: Math.random().toString(),
-      };
-  
-      // setCards((pv) => [...pv, newCard]);
-  
+
+      await createWord({productId, wordText, definition});
       setAdding(false);
-    // 수정
     };
-  
+
     return (
       <>
         {adding ? (
           <motion.form layout onSubmit={handleSubmit}>
             <textarea
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => setWordText(e.target.value)}
               autoFocus
               placeholder="Add new task..."
               className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
             />
+              <textarea
+              onChange={(e) => setDefinition(e.target.value)}
+              autoFocus
+              placeholder="Add new task..."
+              className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
+            />
+
             <div className="mt-1.5 flex items-center justify-end gap-1.5">
               <button
                 onClick={() => setAdding(false)}
