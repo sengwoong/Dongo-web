@@ -20,11 +20,11 @@ type AddCardProps = {
   
       if (!wordText.trim().length || !definition.trim().length) return;
   
-
       await createWord({productId, wordText, definition});
       setAdding(false);
     };
 
+    
     return (
       <>
         {adding ? (

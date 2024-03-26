@@ -1,19 +1,27 @@
 import { useNavigate } from "react-router-dom";
-import { CardBody, CardBotton, CardFooter, CardHeader } from "../../components/Card";
+import { CardBody, CardBotton, CardFooter, CardHeader, CardWrapper } from "../../components/Card";
 import { RoundBlueButton } from "../../components/RoundButton";
 import { paramKeys } from "../../components/Params";
 
-export default function CardComponent() {
-  
+
+interface MiniCardProps {
+  headerRatio: number;
+  bodyRatio: number;
+}
+
+
+export default function CardComponent({ headerRatio, bodyRatio }: MiniCardProps): JSX.Element {
+  const headerSize = (100 / (headerRatio + bodyRatio)) * headerRatio
+  const bodySize = (100 / (headerRatio + bodyRatio)) * bodyRatio
   return (
-    <div className="card-container">
-      <div className="card">
-        <CardHeader>Header</CardHeader>
-        <CardBody>Body Content</CardBody>
-        <CardFooter>Footer Content</CardFooter>
-        <CardBotton page={2} totalPage={10} />
+      <CardWrapper>
+      <div className='rounded-3xl' style={{ height: `${headerSize}%` }}>
+        <CardHeader backgroundColor='blue'>Header</CardHeader>
       </div>
-    </div>
+      <div className="flex flex-col justify-center items-cente text-center" style={{height: `${ bodySize}%` }}>
+        <CardBody backgroundColor='red'>베이직카드</CardBody>
+      </div>   
+      </CardWrapper>
   );
 }
 
@@ -22,9 +30,10 @@ interface CardProps {
   footerRatio: number;
 }
 
+
 export function BasicCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   return (
-    <div className="relative w-full h-full rounded-3xl overflow-hidden">
+    <CardWrapper >
       <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
         <CardHeader backgroundColor='blue'>Header</CardHeader>
       </div>
@@ -34,10 +43,9 @@ export function BasicCard({ headerRatio, footerRatio }: CardProps): JSX.Element 
       <div style={{ height: `${footerRatio}%` }}>
         <CardFooter backgroundColor='blue'><CardBotton page={2} totalPage={10} /></CardFooter>
       </div>
-    </div>
+    </CardWrapper>
   );
 }
-
 
 
 export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
@@ -51,7 +59,7 @@ export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   };
 
   return (
-    <div className="relative w-full h-full rounded-3xl overflow-hidden">
+    <CardWrapper >
       <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/boling.png" />
       <div className='absolute w-full h-full text-center'>
         <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
@@ -80,7 +88,7 @@ export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
           </CardFooter>
         </div>
       </div>
-    </div>
+    </CardWrapper>
   );
 }
 
@@ -93,7 +101,7 @@ export function SaveVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.El
     }
   
     return (
-      <div className="relative w-full h-full rounded-3xl overflow-hidden">
+      <CardWrapper >
         <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/save.png" />
         <div className='absolute w-full h-full text-center'>
           <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
@@ -119,22 +127,19 @@ export function SaveVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.El
             </CardFooter>
           </div>
         </div>
-      </div>
+      </CardWrapper>
     );
   }
   
-  
-
 
 export function SelectVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   const navigate = useNavigate();
 
-      
-const GotoWord = () => {
-  navigate(`/${paramKeys.Vocabulary}`); 
-  }
+  const GotoWord = () => {
+    navigate(`/${paramKeys.Vocabulary}`); 
+    }
     return (
-      <div className="relative w-full h-full rounded-3xl overflow-hidden">
+      <CardWrapper>
         <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/search.png" />
         <div className='absolute w-full h-full text-center'>
           <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
@@ -160,15 +165,10 @@ const GotoWord = () => {
             </CardFooter>
           </div>
         </div>
-      </div>
+      </CardWrapper>
     );
   }
   
-  
-  
-
-
-
 
 export function NoteImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   const navigate = useNavigate();
@@ -177,7 +177,7 @@ export function NoteImgCard({ headerRatio, footerRatio }: CardProps): JSX.Elemen
     navigate(`/${paramKeys.MyNotes}`); 
     }
     return (
-      <div className="relative w-full h-full rounded-3xl overflow-hidden">
+      <CardWrapper>
         <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/voca.png" />
         <div className='absolute w-full h-full text-center'>
           <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
@@ -203,16 +203,10 @@ export function NoteImgCard({ headerRatio, footerRatio }: CardProps): JSX.Elemen
             </CardFooter>
           </div>
         </div>
-      </div>
+      </CardWrapper>
     );
   }
   
-  
-  
-
-
-
-
 
 export function ExamImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
 
@@ -222,7 +216,7 @@ const GotoExam = () => {
   navigate(`/${paramKeys.ExamRoom}`); 
   }
     return (
-      <div className="relative w-full h-full rounded-3xl overflow-hidden">
+      <CardWrapper>
         <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/search.png" />
         <div className='absolute w-full h-full text-center'>
           <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
@@ -248,9 +242,6 @@ const GotoExam = () => {
             </CardFooter>
           </div>
         </div>
-      </div>
+      </CardWrapper>
     );
   }
-  
-  
-  

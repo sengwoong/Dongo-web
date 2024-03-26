@@ -32,10 +32,7 @@ export const Board: React.FC = () => {
 
   const { word: words1, isLoading: isLoading1, isError: isError1 } = useWords(productsNum[1] || 0);
   const { word: words2, isLoading: isLoading2, isError: isError2 } = useWords(productsNum[2] || 0);
-
-const { allProducts } =useProductFetching()
-
-
+  const { allProducts } =useProductFetching()
 useEffect(() => {
   if (allProducts !== null) {
     const newTitle1 = allProducts.filter((x) => x.id === productsNum[1]);
@@ -45,17 +42,20 @@ useEffect(() => {
   }
 }, [allProducts.length,productsNum[1],productsNum[2]]);
 
+
   useEffect(() => {
     if (!isLoading1 && !isError1) {
       setCard1(words1 || []);
     }
   }, [words1, isLoading1, isError1]);
 
+
   useEffect(() => {
     if (!isLoading2 && !isError2) {
       setCard2(words2 || []);
     }
   }, [words2, isLoading2, isError2]);
+
 
   return (
     <div className="flex flex-col h-full select-none gap-3 p-12 max-w-screen justify-center items-center">

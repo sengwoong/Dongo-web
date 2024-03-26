@@ -1,6 +1,3 @@
-
-
-
 export interface User {
   id: number;
   name: string;
@@ -9,8 +6,6 @@ export interface User {
   role: string;
   createDt: string;
 }
-
-
 interface Pageable {
   pageNumber: number;
   pageSize: number;
@@ -23,11 +18,6 @@ interface Pageable {
   paged: boolean;
   unpaged: boolean;
 }
-
-
- 
-
-
 export interface Product {
   id: number;
   title: string;
@@ -39,8 +29,6 @@ export interface Product {
   createdAt: string;
   user: User;
 }
-
-
 export interface ProductResponse {
   content: Product[];
   pageable: Pageable;
@@ -58,14 +46,12 @@ export interface ProductResponse {
   numberOfElements: number;
   empty: boolean;
 }
-
-
 export type CardType = {
-  word_id: number;
   word: string;
   definition:string;
   product_id: number;
-  wordLocal:number
+  wordLocal:number;
+  word_id: number;
 };
 export interface CardList {
   id: string;
@@ -76,5 +62,3 @@ export interface WordData {
   isLoading: boolean;
   isError: boolean;
 }
-
-

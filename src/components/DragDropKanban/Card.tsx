@@ -5,16 +5,16 @@ type CardProps = CardType & {
     productId:number;
   };
   
-  export const Card = ({ word,definition, wordLocal, productId, handleDragStart }: CardProps) => {
+  export const Card = ({ word,definition, wordLocal,word_id, product_id, handleDragStart }: CardProps) => {
 
     return (
       <>
-        <DropIndicator beforeId={wordLocal.toString()} productId={productId} />
+        <DropIndicator beforeId={wordLocal.toString()} productId={product_id} />
         <motion.div
           layout
           layoutId={wordLocal.toString()}
           draggable="true"
-          onDragStart={(e) => handleDragStart(e, { word,definition, wordLocal, productId })}
+          onDragStart={(e) => handleDragStart(e, { word,definition,word_id, wordLocal, product_id })}
           className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
         >
           <p className="text-sm text-neutral-100">{word}</p>

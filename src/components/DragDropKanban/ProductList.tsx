@@ -1,7 +1,10 @@
 import { useRef } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
 import { useProductFetching } from "../../hooks/api/my_product/my_product";
-
+import CardComponent from "../../pages/components/Card";
+import { CardBody, CardHeader, CardWrapper } from "../Card";
+import { Product } from "../../../utils/types";
+import React from 'react';
 
 
 export default function ProductList() {
@@ -25,7 +28,7 @@ export default function ProductList() {
       }
     };
   
-    const loadMore = () => {
+    const loadMore = () => {      
       if (hasNextPage && !isLoading) {
         fetchNextPage();
       }
@@ -34,7 +37,7 @@ export default function ProductList() {
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>, product: any) => {
 
             e.dataTransfer.setData('productId', JSON.stringify(product)); // 드래그하는 상품 데이터를 설정합니다.
-            const cardId = e.dataTransfer.getData("productId");
+            const cardLocal = e.dataTransfer.getData("productId");
             startDragging()
     };
   
@@ -45,42 +48,48 @@ export default function ProductList() {
     if (!products || products.pages.length === 0) {
       return <div>No products available</div>;
     }
-  
+
     return (
-      <div
-        className="z-50 flex max-w-prose overflow-scroll"
-        ref={productListRef}
-        onWheel={handleWheel}
-        onDragEnd={handleDragEnd}
-      >
+      <div 
+      className="flex w-screen overflow-x-auto "
+      ref={productListRef} 
+      onWheel={handleWheel} 
+      onDragEnd={handleDragEnd}
+    >
       {products.pages.map((pageData, pageIndex) => (
-  <div key={pageIndex} className="flex flex-no-wrap">
-    {pageData.content.map((product: any, productIndex: number) => {
-      // productsNum의 각 요소와 현재 제품의 ID가 다른 경우에만 제품을 표시
-      if (product.id !== productsNum[1] && product.id !== productsNum[2]) {
-        return (
-          <div
-            key={productIndex}
-            className="my-4 w-24 mx-4"
-            draggable // 드래그 가능하도록 설정합니다.
-            onDragStart={(e) => handleDragStart(e, product)}
-          >
-            <h3>{product.title}</h3>
-            <p>{product.content}</p>
+          <div key={pageIndex} className="flex flex-no-wrap">
+              {pageData.content.map((product: Product, productIndex: number) => {
+                  if (product.id !== productsNum[1] && product.id !== productsNum[2]) {
+                      return (
+        <div key={productIndex} className="w-56 h-20 m-3" draggable onDragStart={(e) => handleDragStart(e, product)} >
+        <CardWrapper>
+        <div className='rounded-3xl' style={{ height: `40%` }}>
+          <CardHeader backgroundColor='blue'>
+            <div className="flex w-full justify-around">
+              <div>{product.id}</div>
+              <div>{product.title}</div>
+            </div>
+            </CardHeader>
+        </div>
+        <div className="flex flex-col justify-center items-cente text-center" style={{height: `60%` }}>
+          <CardBody backgroundColor='red'>{product.content}</CardBody>
+        </div>   
+        </CardWrapper>
+        </div>);}
+                  return null;
+              })}
           </div>
-        );
-      }
-      return null; // productsNum 배열의 요소와 동일한 ID를 가진 제품은 표시하지 않음
-    })}
-  </div>
-))}
-        
-  
-        {  hasNextPage && (
-          <button onClick={loadMore} className="my-4 mx-4">
-            Load More
+      ))}
+      {hasNextPage && (
+          <button onClick={loadMore} className="my-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center">
+              Load More
           </button>
-        )}
-      </div>
+      )}
+  </div>
+
     );
   }
+
+
+
+  

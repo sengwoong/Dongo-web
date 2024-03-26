@@ -5,8 +5,8 @@ function Vocabulary() {
   return(
   <div className="w-screen">
     <CustomKanban></CustomKanban>
-  
-  </div>)
+  </div>
+  )
 }
 
 export default Vocabulary;

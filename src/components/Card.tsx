@@ -18,6 +18,7 @@ function selectBackgroundColor(backgroundColor: string | undefined): string {
     return ""; 
 }
 
+
 export const CardHeader: React.FC<ChidrenProps> = ({ children, backgroundColor }) => {
     return (
         <div className={`${selectBackgroundColor(backgroundColor)} p-4 w-full h-full flex justify-center items-center`}>
@@ -25,6 +26,7 @@ export const CardHeader: React.FC<ChidrenProps> = ({ children, backgroundColor }
         </div>
     );
 }
+
 
 export const CardBody: React.FC<ChidrenProps> = ({ children, backgroundColor }) => {
     return (
@@ -34,6 +36,7 @@ export const CardBody: React.FC<ChidrenProps> = ({ children, backgroundColor }) 
     );
 }
 
+
 export const CardFooter: React.FC<ChidrenProps> = ({ children, backgroundColor }) => {
     return (
         <div className={`${selectBackgroundColor(backgroundColor)} p-3 w-full h-full flex items-end  justify-center`}>
@@ -42,9 +45,11 @@ export const CardFooter: React.FC<ChidrenProps> = ({ children, backgroundColor }
     );
 }
 
+
 interface SlideButtonProps {
     position: 'left' | 'right';
 }
+
 
 export const SlideButton: React.FC<SlideButtonProps> = ({ position }) => {
     return (
@@ -54,10 +59,12 @@ export const SlideButton: React.FC<SlideButtonProps> = ({ position }) => {
     );
 }
 
+
 interface CardBottonProps {
     page: number;
     totalPage: number;
 }
+
 // todo:페이징으로 이동
 export const CardBotton: React.FC<CardBottonProps> = ({ page, totalPage }) => {
     return (
@@ -71,4 +78,15 @@ export const CardBotton: React.FC<CardBottonProps> = ({ page, totalPage }) => {
     );
 }
 
-
+interface CardWrapperProps {
+    children: React.ReactNode;
+  }
+  
+  
+  export function CardWrapper({ children }: CardWrapperProps): JSX.Element {
+    return (
+      <div className=" min-w-[100%] h-full rounded-3xl overflow-hidden">
+        {children}
+      </div>
+    );
+  }
