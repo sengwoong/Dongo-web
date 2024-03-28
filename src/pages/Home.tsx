@@ -1,5 +1,5 @@
 import React from "react";
-import {  ExamImgCard, MainCard, NoteImgCard, SaveVocaImgCard, SelectVocaImgCard } from "./components/Card";
+import {  DownLoadImgCard, MainCard, CreatExamImgCard, SaveVocaImgCard, MyVocaImgCard } from "./components/Card";
 
 function Home() {
   return (
@@ -9,9 +9,12 @@ function Home() {
         <div className="grid grid-cols-12 gap-7 w-11/12 h-full">
           {/* 왼쪽 이미지 박스 */}
           <div className="flex flex-col col-span-3 justify-between">
+            <div>
             <SaveVocaImgCard headerRatio={20} footerRatio={30} ></SaveVocaImgCard>
+            </div>
+          
             <div className="mb-4"></div>
-            <SelectVocaImgCard headerRatio={20} footerRatio={30} ></SelectVocaImgCard>
+            <MyVocaImgCard headerRatio={20} footerRatio={30} ></MyVocaImgCard>
           </div>
 
           {/* 중앙에 큰 사각형 */}
@@ -21,9 +24,9 @@ function Home() {
 
           {/* 오른쪽 이미지 박스 */}
           <div className="flex flex-col col-span-3 justify-between">
-            <NoteImgCard headerRatio={20} footerRatio={30} ></NoteImgCard>
+            <DownLoadImgCard headerRatio={20} footerRatio={30} ></DownLoadImgCard>
             <div className="mb-4"></div>
-            <ExamImgCard headerRatio={20} footerRatio={30} ></ExamImgCard>
+            <CreatExamImgCard headerRatio={20} footerRatio={30} ></CreatExamImgCard>
           </div>
         </div>
       </div>

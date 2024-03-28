@@ -1,21 +1,21 @@
 import { useRef } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
 import { useProductFetching } from "../../hooks/api/my_product/my_product";
-import { CardBody, CardHeader, CardWrapper } from "../Card";
+import { CardBody, CardHeader, CardWrapper } from "../../components/Card";
 import { Product } from "../../../utils/types";
 import React from 'react';
 
 
 export default function ProductList() {
     const {  products, fetchNextPage, hasNextPage,  isLoading } = useProductFetching();
-
     const {  productsNum,startDragging, stopDragging } = useDragProduct();
-    useProductFetching();
     const productListRef = useRef<HTMLDivElement>(null);
   
+
     const handleDragEnd = () => {
       stopDragging();
   };
+
 
     const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
       const productListElement = productListRef.current;
@@ -27,16 +27,16 @@ export default function ProductList() {
       }
     };
   
+
     const loadMore = () => {      
       if (hasNextPage && !isLoading) {
         fetchNextPage();
       }
     };
   
-    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, product: any) => {
 
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, product: any) => {
             e.dataTransfer.setData('productId', JSON.stringify(product)); // 드래그하는 상품 데이터를 설정합니다.
-            const cardLocal = e.dataTransfer.getData("productId");
             startDragging()
     };
   

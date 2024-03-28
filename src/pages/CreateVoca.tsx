@@ -1,8 +1,10 @@
-import React from 'react'
 
+import { CustomKanban } from './DragDropKanban-CreateVoca/DragDropKanban'
 function CreateVoca() {
   return (
-    <div>CreateVoca</div>
+    <div className="w-screen">
+    <CustomKanban></CustomKanban>
+  </div>
   )
 }
 

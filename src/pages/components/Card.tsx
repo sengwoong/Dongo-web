@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { CardBody, CardBotton, CardFooter, CardHeader, CardWrapper } from "../../components/Card";
 import { RoundBlueButton } from "../../components/RoundButton";
-import { paramKeys } from "../../components/Params";
+import { paramKeys } from "../../../utils/Params";
 
 
 interface MiniCardProps {
@@ -60,8 +60,8 @@ export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
 
   return (
     <CardWrapper >
-      <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/boling.png" />
-      <div className='absolute w-full h-full text-center'>
+    <div className="w-full h-full relative" style={{ backgroundImage: "url('img/boling.png')", backgroundSize: "cover", backgroundPosition: "50% 0"  }}>
+      <div className=' w-full h-full text-center'>
         <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
           <CardHeader><p className="text-4xl mt-4 text"> 단고 다운 방법</p></CardHeader>
         </div>
@@ -88,6 +88,7 @@ export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
           </CardFooter>
         </div>
       </div>
+    </div>
     </CardWrapper>
   );
 }
@@ -96,14 +97,14 @@ export function MainCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
 export function SaveVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   const navigate = useNavigate();
 
-  const GotoNote = () => {
-    navigate(`/${paramKeys.DownLoad}`); 
+  const CreateVoca = () => {
+    navigate(`/${paramKeys.CreateVoca}`); 
     }
   
     return (
       <CardWrapper >
-        <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/save.png" />
-        <div className='absolute w-full h-full text-center'>
+      <div className="w-full h-full relative" style={{ backgroundImage: "url('img/save.png')", backgroundSize: "cover", backgroundPosition: "50% 0"  }}>
+        <div className=' w-full h-full text-center'>
           <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
             <CardHeader><p className="text-xl mt-4 text">단어저장</p></CardHeader>
           </div>
@@ -113,37 +114,39 @@ export function SaveVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.El
                 <p className="text-center text-md">
                     저장 으로 이동
                 </p>
-              
               </div>
             </CardBody>
           </div>
           <div style={{ height: `${footerRatio}%` }}>
             <CardFooter>
               <div className="flex justify-end items-center w-11/12">
-              <RoundBlueButton onClick={GotoNote}>
+              <RoundBlueButton onClick={CreateVoca}>
               <p className="text-sm">Click</p>
               </RoundBlueButton>               
               </div>
             </CardFooter>
           </div>
         </div>
+      </div>
       </CardWrapper>
     );
   }
   
 
-export function SelectVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
+export function MyVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   const navigate = useNavigate();
 
-  const GotoWord = () => {
+  const Vocabulary = () => {
     navigate(`/${paramKeys.Vocabulary}`); 
     }
+
+
     return (
       <CardWrapper>
-        <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/search.png" />
-        <div className='absolute w-full h-full text-center'>
+      <div className="w-full h-full relative" style={{ backgroundImage: "url('img/search.png')", backgroundSize: "cover", backgroundPosition: "50% 0"  }}>
+        <div className=' w-full h-full text-center'>
           <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
-            <CardHeader><p className="text-xl mt-4 text"> 단어장으로 으로 이동</p></CardHeader>
+            <CardHeader><p className="text-xl mt-4 text"> 단어장 이동</p></CardHeader>
           </div>
           <div style={{ height: `${100 - headerRatio - footerRatio}%` }}>
             <CardBody>
@@ -158,69 +161,31 @@ export function SelectVocaImgCard({ headerRatio, footerRatio }: CardProps): JSX.
           <div style={{ height: `${footerRatio}%` }}>
             <CardFooter>
               <div className="flex justify-end items-center w-11/12">
-              <RoundBlueButton onClick={GotoWord}>
+              <RoundBlueButton onClick={Vocabulary}>
               <p className="text-sm">Click</p>
               </RoundBlueButton>               
               </div>
             </CardFooter>
           </div>
         </div>
+      </div>
       </CardWrapper>
     );
   }
   
 
-export function NoteImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
+export function CreatExamImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
   const navigate = useNavigate();
 
-  const GotoNote = () => {
-    navigate(`/${paramKeys.MyNotes}`); 
+  const CreateExam = () => {
+    navigate(`/${paramKeys.CreateExam}`); 
     }
     return (
       <CardWrapper>
-        <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/voca.png" />
-        <div className='absolute w-full h-full text-center'>
+      <div className="w-full h-full relative" style={{ backgroundImage: "url('img/voca.png')", backgroundSize: "cover", backgroundPosition: "50% 0"  }}>
+        <div className=' w-full h-full text-center'>
           <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
-            <CardHeader><p className="text-xl mt-4 text">노트로 이동</p></CardHeader>
-          </div>
-          <div style={{ height: `${100 - headerRatio - footerRatio}%` }}>
-            <CardBody>
-              <div className="flex flex-col items-center">
-                <p className="text-center text-md">
-                   노트로 이동
-                </p>
-              
-              </div>
-            </CardBody>
-          </div>
-          <div style={{ height: `${footerRatio}%` }}>
-            <CardFooter>
-              <div className="flex justify-end items-center w-11/12">
-              <RoundBlueButton onClick={GotoNote}>
-              <p className="text-sm">Click</p>
-              </RoundBlueButton>               
-              </div>
-            </CardFooter>
-          </div>
-        </div>
-      </CardWrapper>
-    );
-  }
-  
-
-export function ExamImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
-
-const navigate = useNavigate();
-
-const GotoExam = () => {
-  navigate(`/${paramKeys.ExamRoom}`); 
-  }
-    return (
-      <CardWrapper>
-        <img className="absolute w-full h-full opacity-75" alt="같이 공부해요 단고" src="img/search.png" />
-        <div className='absolute w-full h-full text-center'>
-          <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
-            <CardHeader><p className="text-xl mt-4 text">시험지로 이동</p></CardHeader>
+            <CardHeader><p className="text-xl mt-4 text">시험지 저장</p></CardHeader>
           </div>
           <div style={{ height: `${100 - headerRatio - footerRatio}%` }}>
             <CardBody>
@@ -235,13 +200,55 @@ const GotoExam = () => {
           <div style={{ height: `${footerRatio}%` }}>
             <CardFooter>
               <div className="flex justify-end items-center w-11/12">
-              <RoundBlueButton onClick={GotoExam}> 
+              <RoundBlueButton onClick={CreateExam}>
               <p className="text-sm">Click</p>
               </RoundBlueButton>               
               </div>
             </CardFooter>
           </div>
         </div>
+      </div>
       </CardWrapper>
     );
   }
+  
+  export function DownLoadImgCard({ headerRatio, footerRatio }: CardProps): JSX.Element {
+
+    const navigate = useNavigate();
+  
+    const DownLoad = () => {
+      navigate(`/${paramKeys.DownLoad}`); 
+    }
+  
+    return (
+      <CardWrapper>
+        <div className="w-full h-full relative" style={{ backgroundImage: "url('img/search.png')", backgroundSize: "cover" , backgroundPosition: "50% 0" }}>
+          <div className=' w-full h-full text-center'>
+            <div className='rounded-3xl' style={{ height: `${headerRatio}%` }}>
+              <CardHeader><p className="text-xl mt-4 text-black">다운로드 항목으로 이동</p></CardHeader>
+            </div>
+            <div style={{ height: `${100 - headerRatio - footerRatio}%` }}>
+              <CardBody>
+                <div className="flex flex-col items-center">
+                  <p className="text-center text-md text-black">
+                      다운로드 관리
+                  </p>
+                </div>
+              </CardBody>
+            </div>
+            <div style={{ height: `${footerRatio}%` }}>
+              <CardFooter>
+                <div className="flex justify-end items-center w-11/12">
+                  <RoundBlueButton onClick={DownLoad}> 
+                    <p className="text-sm text-white">Click</p>
+                  </RoundBlueButton>               
+                </div>
+              </CardFooter>
+            </div>
+          </div>
+        </div>
+      </CardWrapper>
+    );
+  }
+
+  

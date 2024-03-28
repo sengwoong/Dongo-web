@@ -6,8 +6,10 @@ import { useState } from "react";
 import { useDeleteWord } from "../../hooks/api/my_word/my_word";
 import { useDelectProducts } from "../../hooks/api/my_product/my_product";
 
+
 export function ColumnDrop({ columnId }: { columnId: number }) {
     const { updateProductNum ,stopDragging} = useDragProduct();
+  
   
     const handleDragEnd = async (e: React.DragEvent<HTMLDivElement>) => {
       const el = e.currentTarget;
@@ -21,19 +23,20 @@ export function ColumnDrop({ columnId }: { columnId: number }) {
       stopDragging();
     };
   
+
     const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
-      // Get the element being dragged over
       const el = e.currentTarget;
-      // Add a CSS class to highlight the element
       el.style.border = "2px solid yellow"
     };
   
+
     const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
       const el = e.currentTarget;
       el.style.border = "none";
     };
   
+
     return (
       <DropZone
         onDrop={handleDragEnd}
@@ -44,7 +47,6 @@ export function ColumnDrop({ columnId }: { columnId: number }) {
     );
   }
   
-
 
   export function BurnBarrelDrop() {
 
@@ -60,7 +62,7 @@ export function ColumnDrop({ columnId }: { columnId: number }) {
   
 
     const handleDragLeave = () => {
-      // setActive(false);
+      setActive(false);
     };
 
 
@@ -70,8 +72,6 @@ export function ColumnDrop({ columnId }: { columnId: number }) {
       const productParse = JSON.parse(product);
       const productId = productParse.id;
       setProductId(productId); // productId 업데이트
-      console.log( "productId" );
-      console.log( productId);
       delectProducts({ productId });
       setActive(false);
     };
@@ -95,8 +95,6 @@ export function ColumnDrop({ columnId }: { columnId: number }) {
 
   export function DropMenu({ children }: { children: React.ReactNode }) {
     const { isDragging } = useDragProduct();
-    console.log("isDragging")
-  console.log(isDragging)
     return (
       <div className={`w-screen justify-around absolute flex ${isDragging ? '' : 'hidden'}`}>
         {children}

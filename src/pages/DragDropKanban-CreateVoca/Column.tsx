@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { CardType } from "../../../utils/types";
 import { useUpdateWordData } from "../../hooks/api/my_word/my_word";
-import LoadingBar from "../Portal/LoadingBar";
+import LoadingBar from "../../components/Portal/LoadingBar";
 import { Card, DropIndicator } from "./Card";
 import { AddCard } from "./AddCard";
+
 
 type ColumnProps = {
     title: string | null;
@@ -13,6 +14,7 @@ type ColumnProps = {
     setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
   };
   
+
  export const Column = ({
     title,
     headingColor,
@@ -25,36 +27,24 @@ type ColumnProps = {
 
     // 드래그 시작 시 호출되는 함수
     const handleDragStart = (e: DragEvent, card: CardType) => {
-      console.log("card")
-      console.log("card")
-      console.log("card")
-      console.log(card)
-      console.log(card)
-      console.log(card.product_id)
         if (e.dataTransfer) {
           e.dataTransfer.setData("cardLocal", card.wordLocal.toString());
           e.dataTransfer.setData("wordId", card.word_id.toString());
           e.dataTransfer.setData("productId", card.product_id.toString());
         }
-      
-        console.log("컬럼카드 드래그스타트");
       };
   
 
   const update = async (prodcutId:number, before:string, cardLocal:string) => {
-      // 뮤테이트할떄 키값 안받아옴
       try {
         await updateWordData({ productId: prodcutId, before, cardLocal });
-        // 성공했을 때 다른 작업 수행
     } catch (error) {
-       //했을 때 상태를 변경하여 강제로 리렌더링 유도
     }
     }
 
     // 드래그 종료 시 호출되는 함수
 const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
     console.log("컬럼카드 드래그 끝");
-    // 업데이트 중인 경우 동작하지 않음
     if (isUpdating) {
       return;
     }
@@ -63,24 +53,23 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
     if (e.dataTransfer) {
       cardLocal = e.dataTransfer.getData("cardLocal");
     }
-    // 드래그된 카드의 ID 가져오기
+
     if (!cardLocal) {
       return;
     }
+
     setIsUpdating(true);
     setActive(false);
     clearHighlights();
-    // 드롭된 위치에 가장 가까운 인디케이터 찾기
+
     const indicators = getIndicators();
     const { element } = getNearestIndicator(e, indicators);
     const before = element.dataset.before || "-1";
     try {
-      // 백엔드로 업데이트 요청 보내기
       await update(productId, before, cardLocal);
       console.log("Update successful!");
     } catch (error) {
       console.error("Update failed:", error);
-      // 롤백 또는 에러 처리
     } finally {
       console.log("업데이트종료");
       setIsUpdating(false);
@@ -168,10 +157,10 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
         clearHighlights();
         setActive(false);
       };
-  
+
       const filteredCards = cards.filter((c) => c.product_id === productId);
     
-      
+
       return (
         <div className="w-28 shrink-0 md:w-56">
           <LoadingBar loading={isUpdating} /> 

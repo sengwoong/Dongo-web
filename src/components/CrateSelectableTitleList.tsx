@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { MenuTitle, MiniMenuTitle } from './TitleContent';
 import { useNavigate } from 'react-router-dom';
-import { paramKeys, paramKrToEng } from './Params';
+import { paramKeys, paramKrToEng } from '../../utils/Params';
 
 
 

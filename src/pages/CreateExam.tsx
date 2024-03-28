@@ -1,7 +1,7 @@
 import React from "react";
 
-function CreatePost() {
+function CreateExam() {
   return <div>CreatePost</div>;
 }
 
-export default CreatePost;
+export default CreateExam;

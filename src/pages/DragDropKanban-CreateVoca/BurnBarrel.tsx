@@ -9,29 +9,28 @@ export const BurnBarrel = () => {
 
   const delectWord = useDeleteWord();
 
+
   const handleDragOver = (e:any) => {
     e.preventDefault();
     setActive(true);
   };
 
+
   const handleDragLeave = () => {
     setActive(false);
   };
+
 
   const handleDragEnd = (e:any) => {
     console.log("쓰레기 통으로");
     const wordId = e.dataTransfer.getData("wordId");
     const productId = e.dataTransfer.getData("productId");
-    setProductId(productId); // productId 업데이트
-    // 삭제 로직 실행 예시
-
-
-  const a =   delectWord({ productId, wordId });
-
-  console.log(a)
+    setProductId(productId); 
+   delectWord({ productId, wordId });
     setActive(false);
   };
 
+  
   return (
     <div
       onDrop={handleDragEnd}

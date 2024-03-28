@@ -8,6 +8,7 @@ type AddCardProps = {
   productId: number;
   };
   
+  
  export const AddCard = ({ productId }: AddCardProps) => {
     const [wordText, setWordText] = useState("");
     const [definition, setDefinition] = useState("");
@@ -24,7 +25,7 @@ type AddCardProps = {
       setAdding(false);
     };
 
-    
+
     return (
       <>
         {adding ? (

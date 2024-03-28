@@ -6,7 +6,7 @@ import { useAuthActions } from '../../hooks/auth/useAuthActions';
 
 // todo 파라미터로 강조표시 타이틀 버그있음
 function Naver() {
-    const titles: string[] = ['다운로드', '시험장', '단어장', '내노트'];
+    const titles: string[] = [ '시험만들기','단어만들기', '다운로드', '단어장','소개글'];
 
     const authActions = useAuthActions();
     const { signout } = authActions;

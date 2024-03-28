@@ -1,10 +1,13 @@
 import { CardType } from "../../../utils/types";
 import { motion } from "framer-motion";
+
+
 type CardProps = CardType & {
     handleDragStart: Function;
     productId:number;
   };
   
+
   export const Card = ({ word,definition, wordLocal,word_id, product_id, handleDragStart }: CardProps) => {
 
     return (
@@ -25,12 +28,11 @@ type CardProps = CardType & {
   };
   
 
-
-
   type DropIndicatorProps = {
     beforeId: string | null;
     productId: number;
   };
+  
   
  export const DropIndicator = ({ beforeId, productId }: DropIndicatorProps) => {
     return (

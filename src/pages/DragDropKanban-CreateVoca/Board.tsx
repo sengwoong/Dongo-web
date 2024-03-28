@@ -33,6 +33,8 @@ export const Board: React.FC = () => {
   const { word: words1, isLoading: isLoading1, isError: isError1 } = useWords(productsNum[1] || 0);
   const { word: words2, isLoading: isLoading2, isError: isError2 } = useWords(productsNum[2] || 0);
   const { allProducts } =useProductFetching()
+
+  
 useEffect(() => {
   if (allProducts !== null) {
     const newTitle1 = allProducts.filter((x) => x.id === productsNum[1]);
