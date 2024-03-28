@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
 import { useProductFetching } from "../../hooks/api/my_product/my_product";
-import CardComponent from "../../pages/components/Card";
 import { CardBody, CardHeader, CardWrapper } from "../Card";
 import { Product } from "../../../utils/types";
 import React from 'react';

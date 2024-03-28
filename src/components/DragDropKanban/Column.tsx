@@ -6,7 +6,7 @@ import { Card, DropIndicator } from "./Card";
 import { AddCard } from "./AddCard";
 
 type ColumnProps = {
-    title: string;
+    title: string | null;
     headingColor: string;
     cards: CardType[];
     productId: number;
@@ -176,7 +176,7 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
         <div className="w-28 shrink-0 md:w-56">
           <LoadingBar loading={isUpdating} /> 
           <div className="mb-3 flex items-center justify-between">
-            <h3 className={`font-medium ${headingColor}`}>{title}</h3>
+            <h3 className={`font-medium ${headingColor}`}>{title? title: "드래그를 하여 불러오세요"}</h3>
             <span className="rounded text-sm text-neutral-400">
               {filteredCards.length}
             </span>
@@ -194,7 +194,7 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
               return <Card productId={c.product_id} key={index} {...c} handleDragStart={handleDragStart} />;
             })}
             <DropIndicator beforeId={null} productId={productId} />
-            <AddCard productId={productId}/>
+           {title != null?(<AddCard productId={productId}/>):(<></>)}
           </div>
         </div>
       );

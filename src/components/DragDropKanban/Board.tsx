@@ -69,14 +69,14 @@ useEffect(() => {
           <BurnBarrelDrop />
         </DropMenu>
         <Column
-          title={title1.length > 0 ? title1[0].content : "드래그를 하여 불러오세요"}
+          title={title1.length > 0 ? title1[0].content : null}
           productId={productsNum[1]!}
           headingColor="text-yellow-200"
           cards={card1}
           setCards={setCard1}
         />
         <Column
-          title={title2.length > 0 ? title2[0].content : "드래그를 하여 불러오세요"}
+          title={title2.length > 0 ? title2[0].content :null}
           productId={productsNum[2]!}
           headingColor="text-blue-200"
           cards={card2}

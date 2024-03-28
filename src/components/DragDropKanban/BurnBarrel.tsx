@@ -15,7 +15,7 @@ export const BurnBarrel = () => {
   };
 
   const handleDragLeave = () => {
-    // setActive(false);
+    setActive(false);
   };
 
   const handleDragEnd = (e:any) => {
@@ -24,7 +24,11 @@ export const BurnBarrel = () => {
     const productId = e.dataTransfer.getData("productId");
     setProductId(productId); // productId 업데이트
     // 삭제 로직 실행 예시
-    delectWord({ productId, wordId });
+
+
+  const a =   delectWord({ productId, wordId });
+
+  console.log(a)
     setActive(false);
   };
 

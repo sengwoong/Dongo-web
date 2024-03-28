@@ -1,8 +1,4 @@
-
-
 import axios,{ AxiosResponse } from "axios";
-
-
 import { useLoginData } from "./AuthContext";
 import { User } from "../../../utils/types";
 import { axiosInstance } from "../../../utils/axiosInstance";
@@ -15,12 +11,14 @@ interface UseAuth {
   signout: () => void;
 }
 
+
 type UserResponse = { 
   userId: number,
   token:string
 };
 type ErrorResponse = { message: string };
 type AuthResponseType = UserResponse | ErrorResponse;
+
 
 export function useAuthActions(): UseAuth {
   const { updateUser, clearUser } = useUser();// 쿼리메소드 
@@ -65,9 +63,12 @@ export function useAuthActions(): UseAuth {
     console.log("로그인")
     authServerCall("/user/login", email, password);
   }
+
+
   async function signup(email: string, password: string): Promise<void> {
     authServerCall("/register", email, password);
   }
+
 
   function signout(): void {
     console.log("signout")

@@ -4,14 +4,16 @@ import { queryKeys } from "../../../../utils/react_query/constants";
 import { getStoredLoginData } from "../../auth/local-storage";
 import { baseUrl } from "../../../../utils/axiosInstance/constants";
 import { Product } from "../../../../utils/types";
-
+import { useQueryClient ,useMutation} from "@tanstack/react-query";
 
 async function getProducts({ pageParam }: { pageParam: number }) {
     const userToken = getStoredLoginData();  
-    const  response:Response  = await fetch(`${baseUrl}/product/select_my_all?size=5&page=${pageParam}`, {
+    const { data } = await axiosInstance(`/product/select_my_all?size=5&page=${pageParam}`, {
         headers: getJWTHeader(userToken!.userToken),
     });
-    return response.json();
+
+    console.log(data)
+    return data;
 }
 
 
@@ -26,7 +28,7 @@ export function useProducts() {
     isFetchingNextPage,
     status,
 } = useInfiniteQuery({
-    queryKey: ['projects'],
+    queryKey: [queryKeys.products],
     queryFn: ({ pageParam }) => getProducts({ pageParam }), // 수정된 부분
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
@@ -58,25 +60,51 @@ export const useProductFetching = () => {
     return { allProducts,products, fetchNextPage, hasNextPage, isLoading };
   };
   
-  
 
 interface Page {
     content: any[]; // 제품들의 배열
     // 다른 페이지 속성들도 필요하다면 여기에 추가할 수 있습니다.
   }
   
-  const getAllProductsFromPages = (pages: Page[]): any[] => {
+
+const getAllProductsFromPages = (pages: Page[]): any[] => {
     if (!pages) return []; // 페이지 정보가 없는 경우 빈 배열 반환
-    
     // 각 페이지의 제품들을 모두 합치는 배열
     let allProducts: any[] = [];
-  
     // 각 페이지의 제품들을 allProducts 배열에 추가
     pages.forEach(page => {
       allProducts = allProducts.concat(page.content);
     });
-  
     return allProducts;
   };
   
   
+  type DelectProductsParams = {
+    productId: number;
+  };
+
+
+  export function useDelectProducts() {
+    const queryClient = useQueryClient();
+  
+    const { mutate } = useMutation<void, unknown, DelectProductsParams>({
+      mutationFn: ({ productId }) => delectProducts({productId,queryClient}),
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: [queryKeys.products] });
+      }
+    });
+  
+    return mutate;
+  }
+
+
+  async function delectProducts({ productId,queryClient }: { productId: number ,queryClient:any}) {
+    const userToken = getStoredLoginData();  
+    console.log("userToken!.userToken")
+    console.log(userToken!.userToken)
+    const  response:Response  = await axiosInstance.delete(`/product/delete/${productId}`, {
+        headers: getJWTHeader(userToken!.userToken),
+    });
+    queryClient.invalidateQueries({ queryKey: [queryKeys.products] });
+    return response.json();
+}
