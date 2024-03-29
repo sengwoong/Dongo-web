@@ -76,7 +76,7 @@ export function useCreateExamData() {
 
   const { mutate } = useMutation<void, unknown, CreateexamDataParams>({
     mutationFn: ({  productId, title, content}) =>   creatEexam(productId, title, content),
-    onSuccess: (_, variables) => {
+    onSettled(data, error, variables, context) {
       const { productId } = variables;
       queryClient.invalidateQueries({ queryKey: [queryKeys.myExam, productId] });
     }
