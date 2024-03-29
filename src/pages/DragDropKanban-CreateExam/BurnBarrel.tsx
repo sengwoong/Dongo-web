@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { FaFire } from "react-icons/fa";
 import { FiTrash } from "react-icons/fi";
-import {  useDeleteWord } from "../../hooks/api/word/word";
+import {  useDeleteExam } from "../../hooks/api/exam/exam";
 
 export const BurnBarrel = () => {
   const [active, setActive] = useState(false);
-  const [productId, setProductId] = useState(null); // 초기값은 null 또는 적절한 초기값으로 설정
-
-  const delectWord = useDeleteWord();
+  const delectexam = useDeleteExam();
 
 
   const handleDragOver = (e:any) => {
@@ -23,10 +21,9 @@ export const BurnBarrel = () => {
 
   const handleDragEnd = (e:any) => {
     console.log("쓰레기 통으로");
-    const wordId = e.dataTransfer.getData("wordId");
+    const examId = e.dataTransfer.getData("examId");
     const productId = e.dataTransfer.getData("productId");
-    setProductId(productId); 
-   delectWord({ productId, wordId });
+    delectexam({ productId, examId });
     setActive(false);
   };
 

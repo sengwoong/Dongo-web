@@ -3,6 +3,7 @@ import useDragProduct from "../../../utils/zustant/useDragProduct";
 import { DropZone } from "./DropZone/DropZone";
 import { FiTrash } from "react-icons/fi";
 import { useState } from "react";
+import { useDeleteWord } from "../../hooks/api/word/word";
 import { useDelectProducts } from "../../hooks/api/product/product";
 
 

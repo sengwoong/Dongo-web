@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { CardWordType } from "../../../utils/types";
-import { useUpdateWordData } from "../../hooks/api/word/word";
+import { CardExamType  } from "../../../utils/types";
+import { useUpdateexamData } from "../../hooks/api/exam/exam";
 import LoadingBar from "../../components/Portal/LoadingBar";
 import { Card, DropIndicator } from "./Card";
 import { AddCard } from "./AddCard";
@@ -9,9 +9,9 @@ import { AddCard } from "./AddCard";
 type ColumnProps = {
     title: string | null;
     headingColor: string;
-    cards: CardWordType[];
+    cards: CardExamType[];
     productId: number;
-    setCards: React.Dispatch<React.SetStateAction<CardWordType[]>>;
+    setCards: React.Dispatch<React.SetStateAction<CardExamType[]>>;
   };
   
 
@@ -23,13 +23,13 @@ type ColumnProps = {
   }: ColumnProps) => {
     const [active, setActive] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
-    const updateWordData = useUpdateWordData();
+    const updateexamData = useUpdateexamData();
 
     // 드래그 시작 시 호출되는 함수
-    const handleDragStart = (e: DragEvent, card: CardWordType) => {
+    const handleDragStart = (e: DragEvent, card: CardExamType) => {
         if (e.dataTransfer) {
-          e.dataTransfer.setData("cardLocal", card.wordLocal.toString());
-          e.dataTransfer.setData("wordId", card.word_id.toString());
+          e.dataTransfer.setData("cardLocal", card.examLocal.toString());
+          e.dataTransfer.setData("examId", card.exam_id.toString());
           e.dataTransfer.setData("productId", card.product_id.toString());
         }
       };
@@ -37,7 +37,7 @@ type ColumnProps = {
 
   const update = async (prodcutId:number, before:string, cardLocal:string) => {
       try {
-        await updateWordData({ productId: prodcutId, before, cardLocal });
+        await updateexamData({ productId: prodcutId, before, cardLocal });
     } catch (error) {
     }
     }
@@ -179,7 +179,7 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
               active ? "bg-neutral-800/50" : "bg-neutral-800/0"
             }`}
           >
-            {filteredCards.sort((a, b) => a.wordLocal - b.wordLocal).map((c,index) => {
+            {filteredCards.sort((a, b) => a.examLocal - b.examLocal).map((c,index) => {
               return <Card productId={c.product_id} key={index} {...c} handleDragStart={handleDragStart} />;
             })}
             <DropIndicator beforeId={null} productId={productId} />

@@ -46,7 +46,9 @@ export interface ProductResponse {
   numberOfElements: number;
   empty: boolean;
 }
-export type CardType = {
+
+
+export type CardWordType = {
   word: string;
   definition:string;
   product_id: number;
@@ -55,10 +57,28 @@ export type CardType = {
 };
 export interface CardList {
   id: string;
-  word: CardType[];
+  word: CardWordType[];
 }
 export interface WordData {
-  word: CardType[];
+  word: CardWordType[];
+  isLoading: boolean;
+  isError: boolean;
+}
+
+
+export type CardExamType = {
+  content:string;
+  title: number;
+  examLocal:number;
+  exam_id: number;
+  product_id:number;
+};
+export interface ExamList {
+  id: string;
+  exam: CardExamType[];
+}
+export interface ExamData {
+  exam: CardExamType[];
   isLoading: boolean;
   isError: boolean;
 }

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
-import { useWords } from "../../hooks/api/word/word";
-import { CardWordType, User } from "../../../utils/types";
+import { CardExamType, User } from "../../../utils/types";
 import ProductList from "./ProductList";
 import { BurnBarrelDrop, ColumnDrop, DropMenu } from "./ColumnDrop";
 import { Column } from "./Column";
 import { BurnBarrel } from "./BurnBarrel";
 import { useProductFetching } from "../../hooks/api/product/product";
+import { useExams } from "../../hooks/api/exam/exam";
+
 
 
 interface ProductType {
@@ -24,14 +25,14 @@ interface ProductType {
 
 export const Board: React.FC = () => {
   const { productsNum } = useDragProduct();
-  const [card1, setCard1] = useState<CardWordType[]>([]);
-  const [card2, setCard2] = useState<CardWordType[]>([]);
+  const [card1, setCard1] = useState<CardExamType[]>([]);
+  const [card2, setCard2] = useState<CardExamType[]>([]);
 
   const [title1, setTitle1] = useState<ProductType[]>([]);
   const [title2, setTitle2] = useState<ProductType[]>([]);
 
-  const { word: words1, isLoading: isLoading1, isError: isError1 } = useWords(productsNum[1] || 0);
-  const { word: words2, isLoading: isLoading2, isError: isError2 } = useWords(productsNum[2] || 0);
+  const { exam: exams1, isLoading: isLoading1, isError: isError1 } = useExams(productsNum[1] || 0);
+  const { exam: exams2, isLoading: isLoading2, isError: isError2 } = useExams(productsNum[2] || 0);
   const { allProducts } =useProductFetching()
 
   
@@ -47,16 +48,16 @@ useEffect(() => {
 
   useEffect(() => {
     if (!isLoading1 && !isError1) {
-      setCard1(words1 || []);
+      setCard1(exams1 || []);
     }
-  }, [words1, isLoading1, isError1]);
+  }, [exams1, isLoading1, isError1]);
 
 
   useEffect(() => {
     if (!isLoading2 && !isError2) {
-      setCard2(words2 || []);
+      setCard2(exams2 || []);
     }
-  }, [words2, isLoading2, isError2]);
+  }, [exams2, isLoading2, isError2]);
 
 
   return (

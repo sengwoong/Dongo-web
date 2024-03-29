@@ -1,27 +1,27 @@
-import { CardWordType } from "../../../utils/types";
+import { CardExamType } from "../../../utils/types";
 import { motion } from "framer-motion";
 
 
-type CardProps = CardWordType & {
+type CardProps = CardExamType & {
     handleDragStart: Function;
     productId:number;
   };
   
 
-  export const Card = ({ word,definition, wordLocal,word_id, product_id, handleDragStart }: CardProps) => {
+  export const Card = ({ content,title, examLocal,exam_id, product_id, handleDragStart }: CardProps) => {
 
     return (
       <>
-        <DropIndicator beforeId={wordLocal.toString()} productId={product_id} />
+        <DropIndicator beforeId={examLocal.toString()} productId={product_id} />
         <motion.div
           layout
-          layoutId={wordLocal.toString()}
+          layoutId={examLocal.toString()}
           draggable="true"
-          onDragStart={(e) => handleDragStart(e, { word,definition,word_id, wordLocal, product_id })}
+          onDragStart={(e) => handleDragStart(e, { content,title,exam_id, examLocal, product_id })}
           className="cursor-grab rounded border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
         >
-          <p className="text-sm text-neutral-100">{word}</p>
-          <p className="text-sm text-neutral-100">{definition}</p>
+          <p className="text-sm text-neutral-100">{title}</p>
+          <p className="text-sm text-neutral-100">{content}</p>
         </motion.div>
       </>
     );

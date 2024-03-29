@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
 import { FiPlus } from "react-icons/fi";
-import { useCreateWordData } from "../../hooks/api/word/word";
+import { useCreateExamData } from "../../hooks/api/exam/exam";
 
 
 type AddCardProps = {
@@ -10,18 +10,18 @@ type AddCardProps = {
   
   
  export const AddCard = ({ productId }: AddCardProps) => {
-    const [wordText, setWordText] = useState("");
-    const [definition, setDefinition] = useState("");
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
     const [adding, setAdding] = useState(false);
-    const createWord = useCreateWordData();
+    const createExam = useCreateExamData();
    
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
   
-      if (!wordText.trim().length || !definition.trim().length) return;
-  
-      await createWord({productId, wordText, definition});
+      if (!title.trim().length || !content.trim().length) return;
+
+        await createExam({productId,title, content});
       setAdding(false);
     };
 
@@ -31,13 +31,13 @@ type AddCardProps = {
         {adding ? (
           <motion.form layout onSubmit={handleSubmit}>
             <textarea
-              onChange={(e) => setWordText(e.target.value)}
+              onChange={(e) => setTitle(e.target.value)}
               autoFocus
               placeholder="Add new task..."
               className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
             />
               <textarea
-              onChange={(e) => setDefinition(e.target.value)}
+              onChange={(e) => setContent(e.target.value)}
               autoFocus
               placeholder="Add new task..."
               className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
