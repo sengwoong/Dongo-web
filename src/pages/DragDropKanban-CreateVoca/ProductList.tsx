@@ -1,11 +1,30 @@
 import { useRef, useState } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
-import { useProductFetching } from "../../hooks/api/product/product";
+import {  InfiniteData, FetchNextPageOptions } from '@tanstack/react-query';
+
 import { CardBody, CardHeader, CardWrapper } from "../../components/Card";
 import { Product } from "../../../utils/types";
 import React from 'react';
 
-export default function ProductList() {
+
+// (alias) const useProductFetching: () => {
+//     allProducts: Product[];
+//     products: InfiniteData<any, unknown> | undefined;
+//     fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<...>;
+//     hasNextPage: boolean;
+//     isLoading: boolean;
+// }
+
+interface ProductFetchingResult {
+    allProducts: Product[]; // 모든 상품 목록
+    products: InfiniteData<any, unknown> | undefined; // 페이지네이션된 상품 목록
+    fetchNextPage: (options?: FetchNextPageOptions | undefined) => Promise<any>; // 다음 페이지의 상품을 가져오는 함수
+    hasNextPage: boolean; // 다음 페이지 여부
+    isLoading: boolean; // 로딩 상태
+}
+
+
+export default function ProductList({ useProductFetching }: { useProductFetching: () => ProductFetchingResult }) {
     const {  products, fetchNextPage, hasNextPage,  isLoading } = useProductFetching();
     const {  productsNum,startDragging, stopDragging } = useDragProduct();
     const productListRef = useRef<HTMLDivElement>(null);
@@ -23,9 +42,7 @@ export default function ProductList() {
                 loadMore();
             }
 
-            const scrollPercentage = (scrollLeft / (scrollWidth - clientWidth)) * 100 || 0;
-
-            setScrollBarWidth(`${scrollPercentage}%`);
+            setScrollBarWidth(getScrollBarWidth());
         }
     };
 

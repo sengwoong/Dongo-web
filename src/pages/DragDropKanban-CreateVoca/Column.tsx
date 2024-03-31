@@ -25,6 +25,12 @@ type ColumnProps = {
     const [isUpdating, setIsUpdating] = useState(false);
     const updateWordData = useUpdateWordData();
 
+    console.log("cards")
+    console.log("cards")
+    console.log("cards")
+    console.log(cards)
+    console.log(cards)
+    console.log(cards)
     // 드래그 시작 시 호출되는 함수
     const handleDragStart = (e: DragEvent, card: CardWordType) => {
         if (e.dataTransfer) {
@@ -157,6 +163,11 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
         clearHighlights();
         setActive(false);
       };
+
+      if (!Array.isArray(cards)) {
+        return null; // or any appropriate action for your application
+      }
+      
 
       const filteredCards = cards.filter((c) => c.product_id === productId);
     
