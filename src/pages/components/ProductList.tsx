@@ -1,12 +1,9 @@
-import { useRef, useState } from "react";
-import useDragProduct from "../../../utils/zustant/useDragProduct";
+import React, { useRef, useState } from 'react';
 import { InfiniteData, FetchNextPageOptions } from '@tanstack/react-query';
-
-import { CardBody, CardHeader, CardWrapper } from "../../components/Card";
-import { Product } from "../../../utils/types";
-import React from 'react';
-import { useHorizontalScroll } from "../../hooks/useSideScroll";
-import { useSideScrollPercentage } from "../../hooks/useSideScrollPercentage";
+import { CardBody, CardHeader, CardWrapper } from '../../components/Card';
+import { Product } from '../../../utils/types';
+import { useHorizontalScroll } from '../../hooks/useSideScroll';
+import useDragProduct from '../../../utils/zustant/useDragProduct';
 
 interface ProductFetchingResult {
     allProducts: Product[]; // 모든 상품 목록
@@ -19,11 +16,23 @@ interface ProductFetchingResult {
 export default function ProductList({ useProductFetching }: { useProductFetching: () => ProductFetchingResult }) {
     const { products, fetchNextPage, hasNextPage, isLoading } = useProductFetching();
     const { productsNum, startDragging, stopDragging } = useDragProduct();
-    const productListRef = useHorizontalScroll();
+    const [scrollBarWidth, setScrollBarWidth] = useState<string>('0%');
+    const productListRef = useHorizontalScroll({speed:1.1});
 
 
     const handleDragEnd = () => {
         stopDragging();
+    };
+
+    const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+        const productListElement = productListRef.current;
+        if (productListElement) {
+            const { scrollLeft, scrollWidth, clientWidth } = productListElement;
+            if (scrollLeft > scrollWidth - clientWidth - ((scrollWidth - clientWidth) / 10)) {
+                loadMore();
+            }
+            setScrollBarWidth(getScrollBarWidth());
+        }
     };
 
     const loadMore = () => {
@@ -35,6 +44,7 @@ export default function ProductList({ useProductFetching }: { useProductFetching
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>, product: any) => {
         e.dataTransfer.setData('productId', JSON.stringify(product)); // 드래그하는 상품 데이터를 설정합니다.
         startDragging();
+        setScrollBarWidth(getScrollBarWidth());
     };
 
     if (isLoading && !products) {
@@ -45,8 +55,17 @@ export default function ProductList({ useProductFetching }: { useProductFetching
         return <div>No products available</div>;
     }
 
+    const getScrollBarWidth = () => {
+        if (productListRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = productListRef.current;
+            const percentage = (scrollLeft / (scrollWidth - clientWidth)) * 100 || 0;
+            return `calc(${percentage}% - 2px)`;
+        }
+        return '0%';
+    };
+
     return (
-        <div className="flex w-screen scrollbar-hide overflow-x-scroll" ref={productListRef} onDragEnd={handleDragEnd}>
+        <div className="flex w-screen scrollbar-hide overflow-x-scroll" ref={productListRef} onWheel={handleWheel} onDragEnd={handleDragEnd}>
             <div className="relative flex">
                 {products.pages.map((pageData, pageIndex) => (
                     <div key={pageIndex} className="flex flex-no-wrap">
@@ -63,7 +82,7 @@ export default function ProductList({ useProductFetching }: { useProductFetching
                                                     </div>
                                                 </CardHeader>
                                             </div>
-                                            <div className="flex flex-col justify-center items-center text-center" style={{ height: `60%` }}>
+                                            <div className="flex flex-col justify-center items-cente text-center" style={{ height: `60%` }}>
                                                 <CardBody backgroundColor='red'>{product.content}</CardBody>
                                             </div>
                                         </CardWrapper>
@@ -74,8 +93,8 @@ export default function ProductList({ useProductFetching }: { useProductFetching
                         })}
                     </div>
                 ))}
+                <div className="h-2 absolute bg-blue-500 bottom-0 left-0 z-50 scrollbar transition-width duration-500" style={{ width: scrollBarWidth }}></div>
             </div>
-         
             {hasNextPage && (
                 <button onClick={loadMore} className="my-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center">
                     Load More

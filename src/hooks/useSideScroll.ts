@@ -1,6 +1,6 @@
 import { useRef, useEffect, RefObject } from "react";
 
-export function useHorizontalScroll(): RefObject<HTMLDivElement> {
+export function useHorizontalScroll({speed = 1}:{speed:number}): RefObject<HTMLDivElement> {
   const elRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export function useHorizontalScroll(): RefObject<HTMLDivElement> {
         if (e.deltaY === 0) return;
         e.preventDefault();
         el.scrollTo({
-          left: el.scrollLeft + e.deltaY,
+          left: el.scrollLeft*speed + e.deltaY,
           behavior: "smooth"
         });
       };
