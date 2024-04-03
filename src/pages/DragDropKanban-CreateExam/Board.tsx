@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
 import { CardExamType, User } from "../../../utils/types";
-import ProductList from "./ProductList";
 import { BurnBarrelDrop, ColumnDrop, DropMenu } from "./ColumnDrop";
 import { Column } from "./Column";
 import { BurnBarrel } from "./BurnBarrel";
 import { useProductFetching } from "../../hooks/api/product/product";
 import { useExams } from "../../hooks/api/exam/exam";
+import ProductList from "../components/ProductList";
 
 
 
@@ -59,11 +59,17 @@ useEffect(() => {
     }
   }, [exams2, isLoading2, isError2]);
 
+  console.log("useProductFetching")
+  console.log(useProductFetching())
+  console.log(useProductFetching())
+console.log(useProductFetching())
 
   return (
     <div className="flex flex-col h-full select-none gap-3 p-12 max-w-screen justify-center items-center">
       <div className="flex h-32 justify-center items-center max-w-prose">
-        <ProductList />
+      <ProductList
+        useProductFetching = {useProductFetching}
+        />
       </div>
       <div className="flex w-screen justify-around">
         <DropMenu>

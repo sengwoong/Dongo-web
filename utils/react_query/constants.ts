@@ -4,3 +4,8 @@ export const queryKeys: Record<string, string> = {
   user: "user",
   products:"products"
 };
+export const queryAssistantKeys: Record<string, string> = {
+  main:"main",
+  gm:"gm",
+  popular: "popular",
+};

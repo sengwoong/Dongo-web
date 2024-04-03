@@ -82,3 +82,10 @@ export interface ExamData {
   isLoading: boolean;
   isError: boolean;
 }
+
+export interface ProductSearchCriteria {
+  type: string;
+  content: string;
+  downCountOrder: string;
+  currentOrder: string;
+}

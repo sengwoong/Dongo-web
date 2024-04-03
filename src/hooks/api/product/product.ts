@@ -2,22 +2,23 @@ import { axiosInstance, getJWTHeader } from "../../../../utils/axiosInstance";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { queryKeys } from "../../../../utils/react_query/constants";
 import { getStoredLoginData } from "../../auth/local-storage";
-import { baseUrl } from "../../../../utils/axiosInstance/constants";
-import { Product } from "../../../../utils/types";
+import { Product, ProductSearchCriteria } from "../../../../utils/types";
 import { useQueryClient ,useMutation} from "@tanstack/react-query";
 
 async function getProducts({ pageParam }: { pageParam: number }) {
     const userToken = getStoredLoginData();  
+    
     const { data } = await axiosInstance(`/product/select_my_all?size=5&page=${pageParam}`, {
         headers: getJWTHeader(userToken!.userToken),
     });
 
+    console.log("getProducts")
     console.log(data)
     return data;
 }
 
 
-export function useProducts() {
+ function useProducts() {
 
   const {
     data,
@@ -61,6 +62,65 @@ export const useProductFetching = () => {
   };
   
 
+
+
+
+  //http://127.0.0.1:8080/product/search_options?type=&content=&downCountOrder=&currentOrder=&page=0&size=5
+
+  async function getOptionProducts({ pageParam, searchCriteria }: { pageParam: number, searchCriteria: ProductSearchCriteria }) {
+    const userToken = getStoredLoginData();  
+
+    const { data } = await axiosInstance.get(`/product/search_options?type=${searchCriteria.type}&content=${searchCriteria.content}&downCountOrder=${searchCriteria.downCountOrder}&currentOrder=${searchCriteria.currentOrder}&size=5&page=${pageParam}`, {
+      headers: getJWTHeader(userToken!.userToken),
+  }); 
+    console.log("getOptionProducts")
+    console.log(data)
+    return data;
+  }
+
+
+  // 파라미터를 불러옮
+function useOptionProducts({ searchCriteria, queryAssistantKeys }: { searchCriteria: ProductSearchCriteria, queryAssistantKeys: string }) {
+
+  const {
+      data,
+      error,
+      fetchNextPage,
+      hasNextPage,
+      isFetching,
+      isFetchingNextPage,
+      status,
+  } = useInfiniteQuery({
+      queryKey: [queryKeys.products, queryAssistantKeys],
+      queryFn: ({ pageParam, }) => getOptionProducts({ pageParam, searchCriteria }), // 수정된 부분
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) => {
+          if (lastPage.pageable.pageNumber > lastPage.totalPages) {
+              return null; // 다음 페이지가 없을 경우 null 반환
+          } else {
+              return lastPage.pageable.pageNumber + 1; // 다음 페이지 번호 반환
+          }
+      },
+  });
+  return { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status };
+}
+
+
+export const useOptionProductFetching = ({ searchCriteria, queryAssistantKeys }: { searchCriteria: ProductSearchCriteria, queryAssistantKeys:string }) => {
+  const { data: products, fetchNextPage, hasNextPage, isFetching: isLoading } = useOptionProducts({ searchCriteria, queryAssistantKeys });
+
+  const getProductTitles = (products: any): Product[] => {
+      if (!products) return []; 
+      const allProducts: Product[] = getAllProductsFromPages(products.pages);
+      return allProducts;
+  };
+
+  const allProducts = getProductTitles(products);
+
+  return { allProducts, products, fetchNextPage, hasNextPage, isLoading };
+};
+
+
 interface Page {
     content: any[]; // 제품들의 배열
     // 다른 페이지 속성들도 필요하다면 여기에 추가할 수 있습니다.
@@ -79,6 +139,18 @@ const getAllProductsFromPages = (pages: Page[]): any[] => {
   };
   
   
+
+
+
+
+
+
+
+
+
+
+
+
   type DelectProductsParams = {
     productId: number;
   };

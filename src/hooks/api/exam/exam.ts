@@ -51,6 +51,8 @@ export function useUpdateexamData() {
 }
 
 async function exchangeExams(productId: number, before: string, cardLocal: string) {
+
+  console.log(before,cardLocal)
   try {
     const userToken = getStoredLoginData(); 
     const { data } = await axiosInstance.post(`exam/update/exchange/${productId}`, { "prevId":before, "currentId":cardLocal }

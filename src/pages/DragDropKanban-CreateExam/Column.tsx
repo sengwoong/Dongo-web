@@ -65,6 +65,8 @@ const handleDragEnd: React.DragEventHandler<HTMLDivElement> = async (e) => {
     const indicators = getIndicators();
     const { element } = getNearestIndicator(e, indicators);
     const before = element.dataset.before || "-1";
+    console.log(before)
+
     try {
       await update(productId, before, cardLocal);
       console.log("Update successful!");

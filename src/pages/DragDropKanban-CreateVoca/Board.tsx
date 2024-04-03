@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import useDragProduct from "../../../utils/zustant/useDragProduct";
 import { useWords } from "../../hooks/api/word/word";
 import { CardWordType, User } from "../../../utils/types";
-import ProductList from "./ProductList";
+
 import { BurnBarrelDrop, ColumnDrop, DropMenu } from "./ColumnDrop";
 import { Column } from "./Column";
 import { BurnBarrel } from "./BurnBarrel";
 import { useProductFetching } from "../../hooks/api/product/product";
+import ProductList from "../components/ProductList";
+
 
 
 interface ProductType {
@@ -60,9 +62,9 @@ useEffect(() => {
 
 
   return (
-    <div className="flex flex-col h-full select-none gap-3 p-12 max-w-screen justify-center items-center">
-      <div className="flex h-32 justify-center items-center max-w-prose">
-        <ProductList 
+    <div className="flex flex-col h-full select-none gap-3 p-12 max-w-screen items-center">
+      <div className="flex h-32 justify-center items-center  w-[90vw]">
+        <ProductList
         useProductFetching = {useProductFetching}
         />
       </div>

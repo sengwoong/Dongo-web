@@ -1,2 +1,2 @@
-export const baseUrl:string = 'localhost:8080/';
+export const baseUrl:string = 'http://127.0.0.1:8080';
 export const baseImageUrl:string = `${baseUrl}/images`;

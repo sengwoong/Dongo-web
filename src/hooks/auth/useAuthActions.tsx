@@ -32,12 +32,15 @@ export function useAuthActions(): UseAuth {
     pwd: string,
   ): Promise<void> {
     try {
-
+      console.log("로그인 urlEndpoint")
+      console.log(urlEndpoint)
       const { data, status }: AxiosResponse<AuthResponseType> = await axiosInstance.post(urlEndpoint, { email, pwd }, {
         headers: {
           "Content-Type": "application/json"
         },
       });
+      console.log("로그인 정보data")
+      console.log(data)
 
       if (status === 400) {
         const title = "message" in data ? data.message : "Unauthorized";
@@ -50,6 +53,9 @@ export function useAuthActions(): UseAuth {
         setLoginData({ userId: userId , userToken: token ??'' }); // 로컬스토리지 토큰산입
       }
     } catch (errorResponse) {
+      console.log(errorResponse)
+    console.log("로그인중 에러")
+
       const title =
         axios.isAxiosError(errorResponse) &&
         errorResponse?.response?.data?.message
