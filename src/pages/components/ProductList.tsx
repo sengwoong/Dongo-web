@@ -20,7 +20,7 @@ export default function ProductList({ useProductFetching }: { useProductFetching
     const { products, fetchNextPage, hasNextPage, isLoading } = useProductFetching();
     const { productsNum, startDragging, stopDragging } = useDragProduct();
     const productListRef = useHorizontalScroll();
-    const searchBar = useSideScrollPercentage();
+
 
     const handleDragEnd = () => {
         stopDragging();
@@ -75,7 +75,7 @@ export default function ProductList({ useProductFetching }: { useProductFetching
                     </div>
                 ))}
             </div>
-            <div className="h-2 absolute bg-blue-500 bottom-0 left-0 z-50 scrollbar transition-width duration-300" ref={searchBar}></div>
+         
             {hasNextPage && (
                 <button onClick={loadMore} className="my-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center">
                     Load More
