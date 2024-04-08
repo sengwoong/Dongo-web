@@ -17,8 +17,7 @@ export default function ProductList({ useProductFetching }: { useProductFetching
     const { products, fetchNextPage, hasNextPage, isLoading } = useProductFetching();
     const { productsNum, startDragging, stopDragging } = useDragProduct();
     const [scrollBarWidth, setScrollBarWidth] = useState<string>('0%');
-    const productListRef = useHorizontalScroll({speed:1.1});
-
+    const productListRef = useHorizontalScroll({ speed: 1.1 }); // 적절한 speed 값을 전달해야합니다.
 
     const handleDragEnd = () => {
         stopDragging();
@@ -31,7 +30,6 @@ export default function ProductList({ useProductFetching }: { useProductFetching
             if (scrollLeft > scrollWidth - clientWidth - ((scrollWidth - clientWidth) / 10)) {
                 loadMore();
             }
-            setScrollBarWidth(getScrollBarWidth());
         }
     };
 
@@ -44,7 +42,6 @@ export default function ProductList({ useProductFetching }: { useProductFetching
     const handleDragStart = (e: React.DragEvent<HTMLDivElement>, product: any) => {
         e.dataTransfer.setData('productId', JSON.stringify(product)); // 드래그하는 상품 데이터를 설정합니다.
         startDragging();
-        setScrollBarWidth(getScrollBarWidth());
     };
 
     if (isLoading && !products) {
@@ -54,15 +51,6 @@ export default function ProductList({ useProductFetching }: { useProductFetching
     if (!products || products.pages.length === 0) {
         return <div>No products available</div>;
     }
-
-    const getScrollBarWidth = () => {
-        if (productListRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = productListRef.current;
-            const percentage = (scrollLeft / (scrollWidth - clientWidth)) * 100 || 0;
-            return `calc(${percentage}% - 2px)`;
-        }
-        return '0%';
-    };
 
     return (
         <div className="flex w-screen scrollbar-hide overflow-x-scroll" ref={productListRef} onWheel={handleWheel} onDragEnd={handleDragEnd}>
@@ -93,7 +81,7 @@ export default function ProductList({ useProductFetching }: { useProductFetching
                         })}
                     </div>
                 ))}
-                <div className="h-2 absolute bg-blue-500 bottom-0 left-0 z-50 scrollbar transition-width duration-500" style={{ width: scrollBarWidth }}></div>
+                
             </div>
             {hasNextPage && (
                 <button onClick={loadMore} className="my-4 mx-4 px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center">

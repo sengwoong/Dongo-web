@@ -1,6 +1,10 @@
 import { useRef, useEffect, RefObject } from "react";
 
-export function useHorizontalScroll({speed = 1}:{speed:number}): RefObject<HTMLDivElement> {
+interface UseHorizontalScrollProps {
+  speed?: number;
+}
+
+export function useHorizontalScroll({ speed = 1 }: UseHorizontalScrollProps): RefObject<HTMLDivElement> {
   const elRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -8,12 +12,12 @@ export function useHorizontalScroll({speed = 1}:{speed:number}): RefObject<HTMLD
 
     if (el) {
       const onWheel = (e: WheelEvent) => {
-        if (e.deltaY === 0) return;
         e.preventDefault();
         el.scrollTo({
-          left: el.scrollLeft*speed + e.deltaY,
+          left: el.scrollLeft + e.deltaY * speed,
           behavior: "smooth"
         });
+        console.log(el.scrollLeft + e.deltaY * speed);
       };
 
       el.addEventListener("wheel", onWheel);
@@ -22,7 +26,7 @@ export function useHorizontalScroll({speed = 1}:{speed:number}): RefObject<HTMLD
         el.removeEventListener("wheel", onWheel);
       };
     }
-  }, []);
+  }); // 의존성 배열 비워둠
 
   return elRef;
 }
