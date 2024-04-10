@@ -1,4 +1,5 @@
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import Nudake from '../components/Nudake';
 
 interface EmailContent {
   name: string;
@@ -49,7 +50,7 @@ if(screenWidth*2<size){
       return
     }
     setIntervalId(setInterval(() => {
-      setSize((prevSize) => prevSize + 50);
+      setSize((prevSize) => prevSize + 150);
     }, 100));
   };
 
@@ -69,6 +70,7 @@ if(screenWidth*2<size){
 
   return (
     <div>
+
       <div 
        className={`w-screen h-screen bg-gray-800 flex justify-center items-center ${!main ? 'block' : 'hidden'}`}
         onMouseDown={handleMouseDown}
@@ -86,7 +88,8 @@ if(screenWidth*2<size){
 
       <div className={`bg-gray-200 min-h-screen flex flex-col items-center justify-center ${main ? 'block' : 'hidden'}`}>
         {/* Intro Section */}
-        <div className="max-w-4xl w-full mx-6 md:mx-auto p-8 bg-white shadow-md rounded-lg mb-8">
+
+        <div className="max-w-4xl w-full mx-6 md:mx-auto p-8 bg-white shadow-md rounded-lg mb-8  mt-14">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">단고 웹사이트</h1>
           <p className="text-lg md:text-xl text-center mb-8">저희들은 커스텀 깜빡이 영어 사이트를 제공을 합니다.</p>
           <div className="flex flex-wrap justify-center">
@@ -112,16 +115,22 @@ if(screenWidth*2<size){
         </div>
         
         {/* Slide (Screenshots) Section */}
-        <div className="max-w-4xl w-full mx-6 md:mx-auto p-8 bg-white shadow-md rounded-lg mb-8">
-          {/* Your screenshot slider goes here */}
+        <div className="w-[95vw]   h-[130vw] sm:h-[90vw] md:h-[80vw]  mx-6 md:mx-auto p-8 bg-white shadow-md rounded-lg mb-8">
+        <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">여러 가지 단고를 발굴해 보아요</h1>
+        <h2 className="text-xl font-semibold text-center mb-4">긁어서 확인하기</h2>
+          <Nudake></Nudake>
         </div>
         
-        {/* App Download & Contact Section */}
         <div className="max-w-4xl w-full mx-6 md:mx-auto p-8 bg-white shadow-md rounded-lg mb-8">
-          <div className="flex flex-col md:flex-row justify-center items-center">
+        <div className="flex flex-col md:flex-row justify-center items-center">
             <a href="/path/to/your/android/app" className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-full mb-4 md:mb-0 md:mr-4 transition duration-300">Download for Android</a>
             <a href="/path/to/your/ios/app" className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-full transition duration-300">Download for iOS</a>
           </div>
+        </div>
+
+        {/* App Download & Contact Section */}
+        <div className="max-w-4xl w-full mx-6 md:mx-auto p-8 bg-white shadow-md rounded-lg mb-8">
+        
           <form onSubmit={handleSubmit} className="flex flex-col text-center mt-4 item-center justify-center">
             <input type="text" name="name" value={emailContent.name} onChange={handleChange} placeholder="Your Name" className="block w-full px-4 py-3 rounded-md border-gray-300 mb-4" required />
             <input type="email" name="email" value={emailContent.email} onChange={handleChange} placeholder="Your Email" className="block w-full px-4 py-3 rounded-md border-gray-300 mb-4" required />

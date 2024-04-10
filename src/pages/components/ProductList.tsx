@@ -16,7 +16,6 @@ interface ProductFetchingResult {
 export default function ProductList({ useProductFetching }: { useProductFetching: () => ProductFetchingResult }) {
     const { products, fetchNextPage, hasNextPage, isLoading } = useProductFetching();
     const { productsNum, startDragging, stopDragging } = useDragProduct();
-    const [scrollBarWidth, setScrollBarWidth] = useState<string>('0%');
     const productListRef = useHorizontalScroll({ speed: 1.1 }); // 적절한 speed 값을 전달해야합니다.
 
     const handleDragEnd = () => {
